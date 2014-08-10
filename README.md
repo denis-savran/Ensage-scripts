@@ -1,1 +1,1 @@
-Just trying to make some usefull scrits for dota 2.
+Just trying to make some usefull scripts for dota 2.

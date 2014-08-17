@@ -17,7 +17,7 @@ x,y = 5, 50
 local monitor = client.screenSize.x/1600
 local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
 
-r_startTime = 48.5  -- game time seconds when start to stack (from wait point)
+r_startTime = 49  -- game time seconds when start to stack (from wait point)
 d_startTime = 49 
 startTime = 0                       
 stackQuantity = 1  -- number of stacks

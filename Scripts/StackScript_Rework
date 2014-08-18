@@ -21,7 +21,7 @@ local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
 
 r_startTime = 48.5  -- game time seconds when start to stack (from wait point)
 r_satyr_startTime = 48
-d_startTime = 48.5 
+d_startTime = 48.6 
 d_satyr_startTime = 48.7                  
 stackQuantity = 1  -- number of stacks
 

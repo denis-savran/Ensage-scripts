@@ -1,3 +1,5 @@
+-- Stackscript rework by blaxpirit123
+
 --[[		Config			]]
 -- config can be found in Scripts\config\StackScript_Rework.txt
 
@@ -18,14 +20,15 @@ local monitor = client.screenSize.x/1600
 local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
 
 r_startTime = 49  -- game time seconds when start to stack (from wait point)
-d_startTime = 49 
-startTime = 0                       
+r_satyr_startTime = 48
+d_startTime = 48.8 
+d_satyr_startTime = 48.7                  
 stackQuantity = 1  -- number of stacks
 
-stack_route_radiant = {Vector(-3000,40,256), Vector(-7258,-6756,270), Vector(-2144,-480,256)}  -- triangle route for radiant ( 1:pull point, 2: fountain, 3: wait point )
-stack_route_radiant_satyr = {Vector(-3000,40,256), Vector(-6769,-6088,261), Vector(-2144,-480,256)}  -- triangle route for radiant ( 1:pull point, 2: fountain, 3: wait point )
+stack_route_radiant = {Vector(-3025,47,256), Vector(-7258,-6756,270), Vector(-2144,-480,256)}  -- triangle route for radiant ( 1:pull point, 2: fountain, 3: wait point )
+stack_route_radiant_satyr = {Vector(-3025,47,256), Vector(-6769,-6088,261), Vector(-2144,-480,256)}  -- triangle route for radiant ( 1:pull point, 2: fountain, 3: wait point )
 
-stack_route_dire = {Vector(4562,-1960,127), Vector(7022,6422,263), Vector(5083,-1433,127)}  -- triangle route for dire ( 1:pull point, 2: fountain, 3: wait point )
+stack_route_dire = {Vector(4562,-1960,127), Vector(6930,6300,256), Vector(5083,-1433,127)}  -- triangle route for dire ( 1:pull point, 2: fountain, 3: wait point )
 stack_route_dire_satyr = {Vector(4562,-1960,127), Vector(6620,5518,255), Vector(5083,-1433,127)}  -- triangle route for dire ( 1:pull point, 2: fountain, 3: wait point )
 
 
@@ -73,17 +76,19 @@ function Key(msg,code)
 			if player.team == LuaEntity.TEAM_DIRE then
 				if creep.name == "npc_dota_neutral_satyr_hellcaller" then
 					route = stack_route_dire_satyr
+					startTime = d_satyr_startTime
 				else
 					route = stack_route_dire
+					startTime = d_startTime
 				end
-				startTime = d_startTime
 			elseif player.team == LuaEntity.TEAM_RADIANT then
 				if creep.name == "npc_dota_neutral_satyr_hellcaller" then
 					route = stack_route_radiant_satyr
+					startTime = r_satyr_startTime
 				else
 					route = stack_route_radiant
+					startTime = r_startTime
 				end
-				startTime = r_startTime
 			end
 
 			-- maybe we're an observer only, so there's no valid route
@@ -143,17 +148,18 @@ function Tick(tick)
 		end
 		-- increase stack number
 		stackQuantity = stackQuantity + 1
-		-- stack quantityber check
+	elseif ordered and (client.gameTime % 60 < startTime) then
+		ordered = false
+		-- stack quantity check
 		if stackQuantity == 4 then 
 			text.text = "StackScript: farm your stacks and press hotkey. ".."q: "..stackQuantity
 			GenerateSideMessage(entityList:GetMyHero().name,"    Time to FARM!")
 			stackQuantity = 0
 			activated = false
 			creepHandle = nil
+		else 
+			text.text = "StackScript: waiting. ".."q: "..stackQuantity
 		end
-	elseif ordered and (client.gameTime % 60 < startTime) then
-		ordered = false
-		text.text = "StackScript: waiting. ".."q: "..stackQuantity
 	end
 end
 

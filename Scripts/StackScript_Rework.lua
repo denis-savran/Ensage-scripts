@@ -10,10 +10,12 @@ require("libs.SideMessage")
 config = ScriptConfig.new()
 config:SetParameter("Hotkey", "O", config.TYPE_HOTKEY)
 config:SetParameter("SetQuantityToZero", "C",config.TYPE_HOTKEY )
+config:SetParameter("IncreaseNumber", "V",config.TYPE_HOTKEY )
 config:Load()
 
 hotkey = config.Hotkey
 settozero = config.SetQuantityToZero
+increasenumber = config.IncreaseNumber
 x,y = 5, 50
 
 local monitor = client.screenSize.x/1600
@@ -106,6 +108,12 @@ function Key(msg,code)
 	if code == settozero then
 		stackQuantity = 0
 		text.text = "StackScript: you have changed the number of stacks to 0."
+	elseif code == increasenumber then
+		stackQuantity = stackQuantity + 1
+		if stackQuantity > 4 then 
+			stackQuantity = 4
+		end
+		text.text = "StackScript: you have changed the number of stacks to "..stackQuantity
 	end
 end
 

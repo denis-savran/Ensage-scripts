@@ -153,7 +153,7 @@ function Tick(tick)
 		-- stack quantity check
 		if stackQuantity == 4 then 
 			text.text = "StackScript: farm your stacks and press hotkey. ".."q: "..stackQuantity
-			GenerateSideMessage(entityList:GetMyHero().name,"    Time to FARM!")
+			GenerateSideMessage(entityList:GetMyHero().name,"  Time to make some Real Money!")
 			stackQuantity = 0
 			activated = false
 			creepHandle = nil
@@ -193,7 +193,7 @@ function Load()
 end
 
 function GenerateSideMessage(heroname,msg)
-	local sidemsg = sideMessage:CreateMessage(300*monitor,60*monitor,0x111111C0,0x444444FF,150,1000)
+	local sidemsg = sideMessage:CreateMessage(300*monitor,60*monitor,0x111111C0,0x444444FF,200,1500)
 	sidemsg:AddElement(drawMgr:CreateRect(10*monitor,10*monitor,72*monitor,40*monitor,0xFFFFFFFF,drawMgr:GetTextureId("NyanUI/heroes_horizontal/"..heroname:gsub("npc_dota_hero_",""))))
 	sidemsg:AddElement(drawMgr:CreateText(85*monitor,20*monitor,-1,"" .. msg,F15))
 end

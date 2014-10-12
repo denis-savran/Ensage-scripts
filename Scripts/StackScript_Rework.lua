@@ -1,4 +1,7 @@
--- Stackscript rework by blaxpirit123
+-- Stackscript rework by blaxpirit123 
+--[[ Update 1.1
+        Reworked for new camp posision on Dire. Improved stack routes. Now creep go to fountain after 4th stack. 
+  ]]
 
 --[[		Config			]]
 -- config can be found in Scripts\config\StackScript_Rework.txt
@@ -23,18 +26,21 @@ local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
 
 r_startTime = 48.5  -- game time seconds when start to stack (from wait point)
 r_satyr_startTime = 48
-d_startTime = 48.6 
-d_satyr_startTime = 48.7                  
+d_startTime = 47.8
+d_satyr_startTime = 47.5                 
 stackQuantity = 1  -- number of stacks
+satyr = false
 
-stack_route_radiant = {Vector(-3025,47,256), Vector(-7258,-6756,270), Vector(-2144,-480,256)}  -- triangle route for radiant ( 1:pull point, 2: fountain, 3: wait point )
-stack_route_radiant_satyr = {Vector(-3025,47,256), Vector(-6769,-6088,261), Vector(-2144,-480,256)}  -- triangle route for radiant ( 1:pull point, 2: fountain, 3: wait point )
+-- triangle route for radiant
+--                          (1:     pull point   , 2:      move point     , 3:      wait point    , 4:     fountain       )
+stack_route_radiant =       {Vector(-3025,47,256), Vector(-3560,-1438,256), Vector(-2144,-480,256), Vector(-7008,-7072,397)}  
+stack_route_radiant_satyr = {Vector(-3025,47,256), Vector(-3560,-1438,256), Vector(-2144,-480,256), Vector(-6769,-6088,261)}  
+-- triangle route for dire
+--                          (1:     pull point    , 2:      move point   , 3:     wait point  , 4:     fountain     )
+stack_route_dire =          {Vector(3969,-698,127), Vector(2169,-596,127), Vector(2790,91,256), Vector(7008,6816,383)}  
+stack_route_dire_satyr =    {Vector(3969,-698,127), Vector(2169,-596,127), Vector(2790,91,256), Vector(2908,1498,127)} 
 
-stack_route_dire = {Vector(4562,-1960,127), Vector(6930,6300,256), Vector(5083,-1433,127)}  -- triangle route for dire ( 1:pull point, 2: fountain, 3: wait point )
-stack_route_dire_satyr = {Vector(4562,-1960,127), Vector(6620,5518,255), Vector(5083,-1433,127)}  -- triangle route for dire ( 1:pull point, 2: fountain, 3: wait point )
 
-
- 
 activated = true -- toggle by hotkey if activated
 creepHandle = nil -- current creep
 font = drawMgr:CreateFont("stackfont","Arial",14,500) -- font for drawing
@@ -46,6 +52,7 @@ end
 text = drawMgr:CreateText(x,y,-1,defaultText,font) -- text object to draw
 route = nil -- currently active route
 ordered = false -- only order once
+satyr = false
 registered = false -- only register our callbacks once
 
 
@@ -75,8 +82,14 @@ function Key(msg,code)
 			creepHandle = selection[1].handle
 			local creep = entityList:GetEntity(creepHandle)
 			
+			if creep.name == "npc_dota_neutral_satyr_hellcaller" then 
+				satyr = true
+			else 
+				satyr = false
+			end
+				
 			if player.team == LuaEntity.TEAM_DIRE then
-				if creep.name == "npc_dota_neutral_satyr_hellcaller" then
+				if satyr then
 					route = stack_route_dire_satyr
 					startTime = d_satyr_startTime
 				else
@@ -84,7 +97,7 @@ function Key(msg,code)
 					startTime = d_startTime
 				end
 			elseif player.team == LuaEntity.TEAM_RADIANT then
-				if creep.name == "npc_dota_neutral_satyr_hellcaller" then
+				if satyr then
 					route = stack_route_radiant_satyr
 					startTime = r_satyr_startTime
 				else
@@ -148,6 +161,9 @@ function Tick(tick)
 		-- move the triangle route
 		player:Move(route[1],false)
 		player:Move(route[2],true)
+		if stackQuantity == 3 and not satyr then
+			player:Move(route[4],true)
+		end
 		player:Move(route[3],true)
 		-- reselect our former selection
 		player:Select(selection[1])
@@ -184,6 +200,7 @@ function Close()
 	route = nil
 	activated = false
 	ordered = false
+	satyr = false
 
 	script:UnregisterEvent(EVENT_TICK)
 	script:UnregisterEvent(EVENT_KEY)

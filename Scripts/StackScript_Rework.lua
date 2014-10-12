@@ -1,3 +1,4 @@
+--<<Stacks ancient camps>>
 -- Stackscript rework by blaxpirit123 
 --[[ Update 1.1
         Reworked for new camp posision on Dire. Improved stack routes. Now creep go to fountain after 4th stack. 

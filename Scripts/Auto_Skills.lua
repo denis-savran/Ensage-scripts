@@ -12,14 +12,15 @@ local reg         = false
 local monitor     = client.screenSize.x/1600
 local F14         = drawMgr:CreateFont("F14","Tahoma",11*monitor,550*monitor) 
 local statusText  = drawMgr:CreateText(3*monitor,75*monitor,-1,"(" .. string.char(toggleKey) .. ") Auto Disable: Blink",F14) statusText.visible = true
-
+local activated   = 0
  
 sleepTick = nil
+
   
 function Tick( tick )
-    if not SleepCheck() then return end Sleep(30)
-	local me = entityList:GetMyHero() 
-	if not me then return end
+	if not client.connected or client.loading or client.console or not entityList:GetMyHero() then return end
+	if sleepTick and sleepTick > tick then return end	
+	me = entityList:GetMyHero() if not me then return end
 	
 	local ID = me.classId
 	if ID == CDOTA_Unit_Hero_Lion then
@@ -29,9 +30,7 @@ function Tick( tick )
 	else
 		UseHex(me,nil,nil)
 	end
-
-	actived = 0
-
+	
 	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,alive=true,visible=true,illusion=false})
 		for i,v in ipairs(enemies) do
 			local IV = v:IsInvul()
@@ -76,7 +75,7 @@ function Tick( tick )
 			end
 		end
 			
-	actived = 0
+	activated = 0
 end
 
 function Key(msg,code)

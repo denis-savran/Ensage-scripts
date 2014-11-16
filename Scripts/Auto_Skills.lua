@@ -119,134 +119,105 @@ end
 script:RegisterEvent(EVENT_CLOSE,GameClose)
 script:RegisterEvent(EVENT_TICK,Load)
      
---useitem--------------------------------------------------------------------------------------------------------------------------------------
+--use item or skill--------------------------------------------------------------------------------------------------------------------------------------
         
-    function UseEulScepterTarget()--target
-            for t = 1, 6 do
-                    if me:HasItem(t) and me:GetItem(t).name == "item_cyclone" then
-                            DisableItem = me:GetItem(t)
-                    end
-            end
-            if actived == 0 then
-                    if DisableItem and DisableItem.state==-1 then
-                            if target and GetDistance2D(me,target) < 700 then
-     
-                                    me:CastAbility(DisableItem,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
-            end
-    end
+function UseEulScepterTarget()--target
+	local euls = me:FindItem("item_cyclone")
+	if activated == 0 then
+		if euls and euls.cd == 0 then
+			if target and GetDistance2D(me,target) < 700 then
+				me:CastAbility(euls,target)
+				activated = 1
+				sleepTick = GetTick() + 500
+				return
+			end
+		end
+	end
+end
          
-    function UseSheepStickTarget()--target
-            for t = 1, 6 do
-                    if me:HasItem(t) and me:GetItem(t).name == "item_sheepstick" then
-                            DisableItem = me:GetItem(t)
-                    end
-            end
-            if actived == 0 then
-                    if DisableItem and DisableItem.state==-1 then
-                            if target and GetDistance2D(me,target) < 800 then
+function UseSheepStickTarget()--target
+	local sheep = me:FindItem("item_sheepstick")
+	if activated == 0 then
+		if sheep and sheep.cd == 0 then
+			if target and GetDistance2D(me,target) < 800 then
+				me:CastAbility(sheep,target)
+				activated=1
+				sleepTick= GetTick() +500
+				return
+			end
+		end
+	end
+end
      
-                                    me:CastAbility(DisableItem,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
-            end
-    end
+function UseOrchidtarget()--target
+	local orchid = me:FindItem("item_orchid")
+	if activated == 0 then
+		if orchid and orchid.cd == 0 then
+			if target and GetDistance2D(me,target) < 900 then
+				me:CastAbility(orchid,target)
+				activated=1
+				sleepTick= GetTick() +500
+				return
+			end
+		end
+	end
+end
      
-    function UseOrchidtarget()--target
-            for t = 1, 6 do
-                    if me:HasItem(t) and me:GetItem(t).name == "item_orchid" then
-                            DisableItem = me:GetItem(t)
-                    end
-            end
-            if actived == 0 then
-                    if DisableItem and DisableItem.state==-1 then
-                            if target and GetDistance2D(me,target) < 900 then
-     
-                                    me:CastAbility(DisableItem,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
-            end
-    end
-     
-    function UseAbyssaltarget()--target
-            for t = 1, 6 do
-                    if me:HasItem(t) and me:GetItem(t).name == "item_abyssal_blade" then
-                            DisableItem = me:GetItem(t)
-                    end
-            end
-            if actived == 0 then
-                    if DisableItem and DisableItem.state==-1 then
-                            if target and GetDistance2D(me,target) < 140 then
-     
-                                    me:CastAbility(DisableItem,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
-            end
-    end
-    function UseHalberdtarget()--target
-            for t = 1, 6 do
-                    if me:HasItem(t) and me:GetItem(t).name == "item_heavens_halberd" then
-                            DisableItem = me:GetItem(t)
-                    end
-            end
-            if actived == 0 then
-                    if DisableItem and DisableItem.state==-1 then
-                            if target and GetDistance2D(me,target) < 600 then
-     
-                                    me:CastAbility(DisableItem,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
-            end
-    end
-    function UseEtherealtarget()--target
-            for t = 1, 6 do
-                    if me:HasItem(t) and me:GetItem(t).name == "item_ethereal_blade" then
-                            DisableItem = me:GetItem(t)
-                    end
-            end
-            if actived == 0 then
-                    if DisableItem and DisableItem.state==-1 then
-                            if target and GetDistance2D(me,target) < 800 then
-     
-                                    me:CastAbility(DisableItem,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
-            end
-    end
+function UseAbyssaltarget()--target
+	local abyssal_blade = me:FindItem("item_abyssal_blade")
+	if activated == 0 then
+		if abyssal_blade and abyssal_blade.cd == 0 then
+			if target and GetDistance2D(me,target) < 140 then
+				me:CastAbility(abyssal_blade,target)
+				activated=1
+				sleepTick= GetTick() +500
+				return
+			end
+		end
+	end
+end
 	
-	function UseHex(me,abilityHex,abilityHexName)--target
-			if abilityHex and abilityHexName then
-				local hex = me:GetAbility(abilityHex)
-				local skill  = me:FindAbility(abilityHexName)
-				if actived == 0 then
-                    if skill and skill.state==-1 then
-                            if target and GetDistance2D(me,target) < 500 then
-							
-                                    me:SafeCastAbility(hex,target)
-                                    actived=1
-                                    sleepTick= GetTick() +500
-                                    return
-                            end
-                    end
+function UseHalberdtarget()--target
+	local heavens_halberd = me:FindItem("item_heavens_halberd")
+	if activated == 0 then
+		if heavens_halberd and heavens_halberd.cd == 0 then
+			if target and GetDistance2D(me,target) < 600 then
+				me:CastAbility(heavens_halberd,target)
+				activated=1
+				sleepTick= GetTick() +500
+				return
+			end
+		end
+	end
+end
+	
+function UseEtherealtarget()--target
+	local ethereal_blade = me:FindItem("item_ethereal_blade")
+	if activated == 0 then
+		if ethereal_blade and ethereal_blade.cd == 0 then
+			if target and GetDistance2D(me,target) < 800 then
+				me:CastAbility(ethereal_blade,target)
+				activated=1
+				sleepTick= GetTick() +500
+				return
+			end
+		end
+	end
+end
+	
+function UseHex(me,abilityHex,abilityHexName)--target
+	if abilityHex and abilityHexName then
+		local hex = me:GetAbility(abilityHex)
+		local skill  = me:FindAbility(abilityHexName)
+		if actived == 0 then
+			if skill and skill.cd == 0 then
+				if target and GetDistance2D(me,target) < 500 then
+					me:SafeCastAbility(hex,target)
+					actived=1
+					sleepTick= GetTick() +500
+					return
 				end
 			end
+		end
 	end
+end

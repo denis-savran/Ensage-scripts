@@ -208,7 +208,7 @@ function UseHex(me,abilityHex,abilityHexName)--target
 	if abilityHex and abilityHexName then
 		local hex = me:GetAbility(abilityHex)
 		local skill  = me:FindAbility(abilityHexName)
-		if actived == 0 then
+		if activated == 0 then
 			if skill and skill.cd == 0 then
 				if target and GetDistance2D(me,target) < 500 then
 					me:SafeCastAbility(hex,target)

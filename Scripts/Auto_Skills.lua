@@ -212,7 +212,7 @@ function UseHex(me,abilityHex,abilityHexName)--target
 			if skill and skill.cd == 0 then
 				if target and GetDistance2D(me,target) < 500 then
 					me:SafeCastAbility(hex,target)
-					actived=1
+					activated=1
 					sleepTick= GetTick() +500
 					return
 				end

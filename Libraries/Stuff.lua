@@ -100,6 +100,10 @@ npc_dota_hero_puck = {
 Spell = "puck_illusory_orb",
 },
 
+npc_dota_hero_magnataur = {
+Spell = "magnataur_skewer",
+},
+
 npc_dota_hero_ember_spirit = {
 Spell = "ember_spirit_fire_remnant",
 },

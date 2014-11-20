@@ -212,11 +212,13 @@ function UseHex()
 		elseif hex_rast then
 			skill = hex_rast
 		end
-		if target and skill and skill.level > 0 and skill:CanBeCasted() and me:CanCast() and GetDistance2D(me,target) < 500 then
-			me:SafeCastAbility(skill,target)
-			activated = 1
-			sleepTick = GetTick() + 500
-			return
+		if skill and skill.level > 0 and skill:CanBeCasted() and me:CanCast() then
+			if target and GetDistance2D(me,target) < 500 then
+				me:SafeCastAbility(skill,target)
+				activated = 1
+				sleepTick = GetTick() + 500
+				return
+			end
 		end
 	end
 end

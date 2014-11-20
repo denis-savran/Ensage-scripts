@@ -1,3 +1,5 @@
+--<<Auto disable of blinkers and initiators>>
+
 require("libs.Utils")
 require("libs.ScriptConfig")
 require("libs.Stuff")

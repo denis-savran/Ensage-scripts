@@ -64,6 +64,7 @@ function Tick( tick )
 					UseEulScepterTarget()
 					UseHalberdtarget()
 					UseEtherealtarget()
+					UseRodtarget()
 					break
 				elseif activ then
 					UseHex()
@@ -72,6 +73,7 @@ function Tick( tick )
 					UseOrchidtarget()
 					UseSilence()
 					UseEulScepterTarget()
+					UseRodtarget()
 					break
 				elseif Initiation[v.name] then
 					local iSpell =  v:FindSpell(Initiation[v.name].Spell)
@@ -85,6 +87,7 @@ function Tick( tick )
 						UseEulScepterTarget()
 						UseHalberdtarget()
 						UseEtherealtarget()
+						UseRodtarget()
 						break
 					end
 				end
@@ -121,7 +124,7 @@ end
 script:RegisterEvent(EVENT_CLOSE,GameClose)
 script:RegisterEvent(EVENT_TICK,Load)
     
---use item or skill---------------------------------------------------------------------------------------------------
+--use item or skill------------------------------------------------------------
     
 function UseEulScepterTarget()
 	local euls = me:FindItem("item_cyclone")
@@ -130,7 +133,7 @@ function UseEulScepterTarget()
 			if target and GetDistance2D(me,target) < 700 then
 				me:CastAbility(euls,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end
@@ -144,7 +147,7 @@ function UseSheepStickTarget()
 			if target and GetDistance2D(me,target) < 800 then
 				me:CastAbility(sheep,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end
@@ -158,7 +161,7 @@ function UseOrchidtarget()
 			if target and GetDistance2D(me,target) < 900 then
 				me:CastAbility(orchid,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end
@@ -172,7 +175,7 @@ function UseAbyssaltarget()
 			if target and GetDistance2D(me,target) < 140 then
 				me:CastAbility(abyssal_blade,target)
 				activated = 1 
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end
@@ -186,7 +189,7 @@ function UseHalberdtarget()
 			if target and GetDistance2D(me,target) < 600 then
 				me:CastAbility(heavens_halberd,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end
@@ -200,9 +203,20 @@ function UseEtherealtarget()
 			if target and GetDistance2D(me,target) < 800 then
 				me:CastAbility(ethereal_blade,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
+		end
+	end
+end
+
+function UseRodtarget()
+	local rod_of_atos = me:FindItem("item_rod_of_atos")
+	if rod_of_atos and rod_of_atos.cd == 0 then
+		if target and GetDistance2D(me,target) < 1200 then
+			me:CastAbility(rod_of_atos,target)
+			sleepTick = GetTick() + 200
+			return
 		end
 	end
 end
@@ -213,14 +227,14 @@ function UseHex()
 		local hex_rasta = me:FindSpell("shadow_shaman_voodoo")
 		if hex_lion then
 			hex = hex_lion
-		elseif hex_rast then
+		elseif hex_rasta then
 			hex = hex_rasta
 		end
 		if hex and hex.level > 0 and hex:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < 500 then
 				me:SafeCastAbility(hex,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end
@@ -240,7 +254,7 @@ function UseSilence()
 			if target and GetDistance2D(me,target) < silence.castRange  then
 				me:SafeCastAbility(silence,target)
 				activated = 1
-				sleepTick = GetTick() + 500
+				sleepTick = GetTick() + 200
 				return
 			end
 		end

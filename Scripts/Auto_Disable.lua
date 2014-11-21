@@ -43,7 +43,7 @@ function Key(msg,code)
 	end
 end
  
- function IsMouseOnButton(x,y,h,w)
+function IsMouseOnButton(x,y,h,w)
 	local mx = client.mouseScreenPosition.x
 	local my = client.mouseScreenPosition.y
 	return mx > x and mx <= x + w and my > y and my <= y + h

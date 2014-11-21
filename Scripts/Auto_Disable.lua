@@ -33,7 +33,7 @@ function Key(msg,code)
 	end
 	
 	for i = 1,5 do
-		if IsMouseOnButton(250*monitor-3+i*27,11*monitor-1,20,20) then
+		if IsMouseOnButton(265*monitor-3+i*27,11*monitor-1,20,20) then
 			if msg == LBUTTON_DOWN and hero[i] == nil then
 				hero[i] = i
 			elseif msg == LBUTTON_DOWN and hero[i] ~= nil then
@@ -111,8 +111,8 @@ function Tick( tick )
 		activated = 0
 		
 		if not icon[i] then icon[i] = {}
-			icon[i].board = drawMgr:CreateRect(250*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF) 
-			icon[i].mini = drawMgr:CreateRect(250*monitor-2+i*27,11*monitor,18,18,0x000000FF)
+			icon[i].board = drawMgr:CreateRect(265*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF) 
+			icon[i].mini = drawMgr:CreateRect(265*monitor-2+i*27,11*monitor,18,18,0x000000FF)
 		end
 		
 		if not hero[i] then

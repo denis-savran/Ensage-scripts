@@ -43,7 +43,7 @@ function Key(msg,code)
 	end
 end
  
-function IsMouseOnButton(x,y,h,w)
+ function IsMouseOnButton(x,y,h,w)
 	local mx = client.mouseScreenPosition.x
 	local my = client.mouseScreenPosition.y
 	return mx > x and mx <= x + w and my > y and my <= y + h
@@ -55,22 +55,45 @@ function Tick( tick )
 	me = entityList:GetMyHero() if not me then return end
 	
 	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,alive=true,visible=true,illusion=false})
-		for i =1,#enemies do
-			local v = enemies[i]
-			target = enemies[i]
-			local IV  = v:IsInvul()
-			local MI  = v:IsMagicImmune()
-			local ST  = v:IsStunned()
-			local HEX = v:IsHexed()
-			local SI  = v:IsSilenced()
-			local DA  = v:IsDisarmed()
-			local invis  = me:IsInvisible()
-			local chanel = me:IsChanneling()
-			local blink = v:FindItem("item_blink")
-			
-			if not hero[i] then
-				if not (IV or MI or ST or HEX or SI or DA or invis or chanel) then
-					if blink and blink.cd > 11 then
+	for i =1,#enemies do
+		local v = enemies[i]
+		target = enemies[i]
+		local IV  = v:IsInvul()
+		local MI  = v:IsMagicImmune()
+		local ST  = v:IsStunned()
+		local HEX = v:IsHexed()
+		local SI  = v:IsSilenced()
+		local DA  = v:IsDisarmed()
+		local invis  = me:IsInvisible()
+		local chanel = me:IsChanneling()
+		local blink = v:FindItem("item_blink")
+				
+		if not hero[i] then
+			if not (IV or MI or ST or HEX or SI or DA or invis or chanel) then
+				if blink and blink.cd > 11 then
+					UseHex()
+					UseSheepStickTarget()
+					UseAbyssaltarget()
+					UseOrchidtarget()
+					UseSilence()
+					UseEulScepterTarget()
+					UseHalberdtarget()
+					UseEtherealtarget()
+					UseRodtarget()
+					break
+				elseif activ then
+					UseHex()
+					UseSheepStickTarget()
+					UseAbyssaltarget()
+					UseOrchidtarget()
+					UseSilence()
+					UseEulScepterTarget()
+					UseRodtarget()
+					break
+				elseif Initiation[v.name] then
+					local iSpell =  v:FindSpell(Initiation[v.name].Spell)
+					local iLevel = iSpell.level 
+					if iSpell.level > 0 and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
 						UseHex()
 						UseSheepStickTarget()
 						UseAbyssaltarget()
@@ -81,46 +104,23 @@ function Tick( tick )
 						UseEtherealtarget()
 						UseRodtarget()
 						break
-					elseif activ then
-						UseHex()
-						UseSheepStickTarget()
-						UseAbyssaltarget()
-						UseOrchidtarget()
-						UseSilence()
-						UseEulScepterTarget()
-						UseRodtarget()
-						break
-					elseif Initiation[v.name] then
-						local iSpell =  v:FindSpell(Initiation[v.name].Spell)
-						local iLevel = iSpell.level 
-						if iSpell.level > 0 and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
-							UseHex()
-							UseSheepStickTarget()
-							UseAbyssaltarget()
-							UseOrchidtarget()
-							UseSilence()
-							UseEulScepterTarget()
-							UseHalberdtarget()
-							UseEtherealtarget()
-							UseRodtarget()
-							break
-						end
 					end
 				end
 			end
-			activated = 0
-			
-			if not icon[i] then icon[i] = {}
-				icon[i].board = drawMgr:CreateRect(250*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF) 
-				icon[i].mini = drawMgr:CreateRect(250*monitor-2+i*27,11*monitor,18,18,0x000000FF)
-			end
-			
-			if not hero[i] then
-				icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/miniheroes/"..v.name:gsub("npc_dota_hero_",""))		
-			else
-				icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/spellicons/doom_bringer_empty1")
-			end	
 		end
+		activated = 0
+		
+		if not icon[i] then icon[i] = {}
+			icon[i].board = drawMgr:CreateRect(250*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF) 
+			icon[i].mini = drawMgr:CreateRect(250*monitor-2+i*27,11*monitor,18,18,0x000000FF)
+		end
+		
+		if not hero[i] then
+			icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/miniheroes/"..v.name:gsub("npc_dota_hero_",""))		
+		else
+			icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/spellicons/doom_bringer_empty1")
+		end	
+	end
 end
  
 function Load()

@@ -44,7 +44,7 @@ npc_dota_hero_rattletrap = {
 Spell = "rattletrap_hookshot",
 },
 
-npc_dota_hero_earthspirit = {
+npc_dota_hero_earth_spirit = {
 Spell = "earth_spirit_rolling_boulder",
 },
 

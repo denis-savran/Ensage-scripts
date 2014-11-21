@@ -43,7 +43,7 @@ function Key(msg,code)
 	end
 end
  
-function IsMouseOnButton(x,y,h,w)
+ function IsMouseOnButton(x,y,h,w)
 	local mx = client.mouseScreenPosition.x
 	local my = client.mouseScreenPosition.y
 	return mx > x and mx <= x + w and my > y and my <= y + h
@@ -54,7 +54,7 @@ function Tick( tick )
 	if sleepTick and sleepTick > tick then return end	
 	me = entityList:GetMyHero() if not me then return end
 	
-	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,alive=true,visible=true,illusion=false})
+	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,illusion=false})
 	for i =1,#enemies do
 		local v = enemies[i]
 		target = enemies[i]
@@ -68,7 +68,7 @@ function Tick( tick )
 		local chanel = me:IsChanneling()
 		local blink = v:FindItem("item_blink")
 				
-		if not hero[i] then
+		if v.alive and v.visible and not hero[i] then
 			if not (IV or MI or ST or HEX or SI or DA or invis or chanel) then
 				if blink and blink.cd > 11 then
 					UseHex()

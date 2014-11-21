@@ -24,11 +24,27 @@ npc_dota_hero_mirana = {
 Spell = "mirana_leap",
 },
 
-npc_dota_hero_furion = {
+--[[npc_dota_hero_furion = {
 Spell = "furion_teleportation",
+},]]
+
+npc_dota_hero_phantom_lancer = {
+Spell = "phantom_lancer_doppelganger",
 },
 
-npc_dota_hero_earth_spirit = {
+npc_dota_hero_terrorblade = {
+Spell = "terrorblade_sunder",
+},
+
+npc_dota_hero_huskar = {
+Spell = "huskar_life_break",
+},
+
+npc_dota_hero_rattletrap = {
+Spell = "rattletrap_hookshot",
+},
+
+npc_dota_hero_earthspirit = {
 Spell = "earth_spirit_rolling_boulder",
 },
 
@@ -56,7 +72,7 @@ npc_dota_hero_weaver = {
 Spell = "weaver_time_lapse",
 },
 
-npc_dota_hero_sand_king = {
+npc_dota_hero_sandking = {
 Spell = "sandking_epicenter",
 },
 
@@ -69,7 +85,7 @@ Spell = "crystal_maiden_freezing_field",
 },
 
 npc_dota_hero_pudge = {
-Spell = "pudge_meat_hook",
+Spell = "pudge_dismember",
 },
 
 npc_dota_hero_Bane = {
@@ -80,9 +96,9 @@ npc_dota_hero_Enigma = {
 Spell = "enigma_black_hole",
 },
 
-npc_dota_hero_pugna = {
+--[[npc_dota_hero_pugna = {
 Spell = "pugna_life_drain",
-},
+},]]
 
 npc_dota_hero_witch_doctor = {
 Spell = "witch_doctor_death_ward",

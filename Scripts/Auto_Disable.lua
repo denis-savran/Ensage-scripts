@@ -50,9 +50,9 @@ function IsMouseOnButton(x,y,h,w)
 end
  
 function Tick( tick )
-	if not client.connected or client.loading or client.console or not entityList:GetMyHero() then return end
+	if not client.connected or client.loading or client.console then return end
 	if sleepTick and sleepTick > tick then return end	
-	me = entityList:GetMyHero() if not me then return end
+	local me = entityList:GetMyHero() if not me then return end
 	
 	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,illusion=false})
 	for i =1,#enemies do

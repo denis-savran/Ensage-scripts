@@ -93,19 +93,21 @@ function Tick( tick )
 					UseRodtarget()
 					break
 				elseif Initiation[v.name] then
-					local iSpell =  v:FindSpell(Initiation[v.name].Spell)
-					local iLevel = iSpell.level 
-					if iSpell.level > 0 and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
-						UseHex()
-						UseSheepStickTarget()
-						UseAbyssaltarget()
-						UseOrchidtarget()
-						UseSilence()
-						UseEulScepterTarget()
-						UseHalberdtarget()
-						UseEtherealtarget()
-						UseRodtarget()
-						break
+					if v:FindSpell(Initiation[v.name].Spell) and v:FindSpell(Initiation[v.name].Spell).level > 0 then
+						local iSpell =  v:FindSpell(Initiation[v.name].Spell)
+						local iLevel = iSpell.level 
+						if iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
+							UseHex()
+							UseSheepStickTarget()
+							UseAbyssaltarget()
+							UseOrchidtarget()
+							UseSilence()
+							UseEulScepterTarget()
+							UseHalberdtarget()
+							UseEtherealtarget()
+							UseRodtarget()
+							break
+						end
 					end
 				end
 			end

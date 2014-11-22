@@ -21,7 +21,7 @@ local hero = {} local icon = {}
 sleepTick = nil
  
 function Key(msg,code)
-	if client.chat or client.console or client.loading then return end
+	if not PlayingGame() or client.chat then return end
 	
 	if IsKeyDown(toggleKey) then
 		activ = not activ
@@ -50,11 +50,13 @@ function IsMouseOnButton(x,y,h,w)
 end
  
 function Tick( tick )
-	if not client.connected or client.loading or client.console then return end
+	if not PlayingGame() then return end
 	if sleepTick and sleepTick > tick then return end	
 	me = entityList:GetMyHero() if not me then return end
 	
 	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,illusion=false})
+	table.sort( enemies, function (a,b) return a.playerId < b.playerId end )
+	
 	for i =1,#enemies do
 		local v = enemies[i]
 		target = enemies[i]

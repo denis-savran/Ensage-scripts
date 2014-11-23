@@ -115,12 +115,14 @@ function Tick( tick )
 		activated = 0
 		
 		if not icon[i] then icon[i] = {}
-			icon[i].board = drawMgr:CreateRect(265*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF) 
+			icon[i].board = drawMgr:CreateRect(265*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF)
+			icon[i].back = drawMgr:CreateRect(265*monitor-2+i*27,11*monitor,18,18,0x000000FF)
 			icon[i].mini = drawMgr:CreateRect(265*monitor-2+i*27,11*monitor,18,18,0x000000FF)
 		end
 		
 		if not hero[i] then
-			icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/miniheroes/"..v.name:gsub("npc_dota_hero_",""))		
+			icon[i].back.textureId = drawMgr:GetTextureId("NyanUI/spellicons/doom_bringer_empty1")
+			icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/miniheroes/"..v.name:gsub("npc_dota_hero_",""))
 		else
 			icon[i].mini.textureId = drawMgr:GetTextureId("NyanUI/spellicons/doom_bringer_empty1")
 		end	

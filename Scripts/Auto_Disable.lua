@@ -62,6 +62,7 @@ function Tick( tick )
 		target = enemies[i]
 		local IV  = v:IsInvul()
 		local MI  = v:IsMagicImmune()
+		local LS  = v:IsLinkensProtected()
 		local ST  = v:IsStunned()
 		local HEX = v:IsHexed()
 		local SI  = v:IsSilenced()
@@ -71,7 +72,7 @@ function Tick( tick )
 		local blink = v:FindItem("item_blink")
 				
 		if v.alive and v.visible and not hero[i] then
-			if not (IV or MI or ST or HEX or SI or DA or invis or chanel) then
+			if not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
 				if blink and blink.cd > 11 then
 					UseHex()
 					UseSheepStickTarget()

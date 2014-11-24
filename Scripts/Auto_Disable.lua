@@ -1,5 +1,5 @@
 --<<Auto disable of blinkers and initiators>>
-
+--===By Blaxpirit===--
 require("libs.Utils")
 require("libs.ScriptConfig")
 require("libs.Initiators")

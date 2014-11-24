@@ -2,7 +2,8 @@
 
 require("libs.Utils")
 require("libs.ScriptConfig")
-require("libs.Stuff")
+require("libs.Initiators")
+require("libs.DisableSpells")
 
 local config = ScriptConfig.new()
 config:SetParameter("Active", "U", config.TYPE_HOTKEY)
@@ -72,14 +73,18 @@ function Tick( tick )
 		local blink = v:FindItem("item_blink")
 				
 		if v.alive and v.visible and not hero[i] then
-			if me.alive and not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
+			if not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
 				if blink and blink.cd > 11 then
 					UseHex()
 					UseSheepStickTarget()
+					UseImmediateStun()
 					UseAbyssaltarget()
 					UseOrchidtarget()
-					UseSilence()
+					UseSkysSeal()
+					UsePucksRift()
+					UseHeroSpell()
 					UseEulScepterTarget()
+					UseAstral()
 					UseHalberdtarget()
 					UseEtherealtarget()
 					UseRodtarget()
@@ -87,23 +92,30 @@ function Tick( tick )
 				elseif activ then
 					UseHex()
 					UseSheepStickTarget()
+					UseImmediateStun()
 					UseAbyssaltarget()
 					UseOrchidtarget()
-					UseSilence()
+					UseSkysSeal()
+					UsePucksRift()
 					UseEulScepterTarget()
+					UseAstral()
 					UseRodtarget()
 					break
 				elseif Initiation[v.name] then
 					if v:FindSpell(Initiation[v.name].Spell) and v:FindSpell(Initiation[v.name].Spell).level > 0 then
-						local iSpell =  v:FindSpell(Initiation[v.name].Spell)
+						local iSpell = v:FindSpell(Initiation[v.name].Spell)
 						local iLevel = iSpell.level 
-						if iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
+						if iSpell and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
 							UseHex()
 							UseSheepStickTarget()
+							UseImmediateStun()
 							UseAbyssaltarget()
 							UseOrchidtarget()
-							UseSilence()
+							UseSkysSeal()
+							UsePucksRift()
+							UseHeroSpell()
 							UseEulScepterTarget()
+							UseAstral()
 							UseHalberdtarget()
 							UseEtherealtarget()
 							UseRodtarget()
@@ -279,21 +291,87 @@ function UseHex()
 	end
 end
 
-function UseSilence()
+function UseAstral()
 	if activated == 0 then
-		local silence_sky = me:FindSpell("skywrath_mage_ancient_seal")
-		local silence_ns  = me:FindSpell("night_stalker_crippling_fear")
-		if silence_sky then
-			silence = silence_sky
-		elseif silence_ns then
-			silence = silence_ns
+		local astral_od = me:FindSpell("obsidian_destroyer_astral_imprisonment")
+		local astral_sd = me:FindSpell("shadow_demon_disruption")
+		if alstral_destr then
+			alstral = alstral_destr
+		elseif astral_sd then
+			astral = astral_sd
 		end
+		if astral and astral.level > 0 and astral:CanBeCasted() and me:CanCast() then
+			if target and GetDistance2D(me,target) < astral.castRange  then
+				me:SafeCastAbility(astral,target)
+				activated = 1
+				sleepTick = GetTick() + 200
+				return
+			end
+		end
+	end
+end
+
+function UseImmediateStun()
+	if activated == 0 then
+		local tlknz = me:FindSpell("rubick_telekinesis")
+		local dtail = me:FindSpell("dragon_knight_dragon_tail")
+		if tlknz then
+			stun = tlknz
+		elseif dtail then
+			stun = dtail
+		end
+		if stun and stun.level > 0 and stun:CanBeCasted() and me:CanCast() then
+			if target and GetDistance2D(me,target) < stun.castRange then
+				me:SafeCastAbility(stun,target)
+				activated = 1
+				sleepTick = GetTick() + 200
+				return
+			end
+		end
+	end
+end
+
+function UseSkysSeal()
+	if activated == 0 then
+		local silence = me:FindSpell("skywrath_mage_ancient_seal")
 		if silence and silence.level > 0 and silence:CanBeCasted() and me:CanCast() then
-			if target and GetDistance2D(me,target) < silence.castRange  then
+			if target and GetDistance2D(me,target) < silence.castRange then
 				me:SafeCastAbility(silence,target)
 				activated = 1
 				sleepTick = GetTick() + 200
 				return
+			end
+		end
+	end
+end
+
+function UsePucksRift()
+	if activated == 0 then
+		local silence = me:FindSpell("puck_waning_rift")
+		if silence and silence.level > 0 and silence:CanBeCasted() and me:CanCast() then
+			if target and GetDistance2D(me,target) < 400 then
+				me:SafeCastAbility(silence)
+				activated = 1
+				sleepTick = GetTick() + 200
+				return
+			end
+		end
+	end
+end
+
+function UseHeroSpell()
+	if activated == 0 then
+		if DisableSpell[me.name] then
+			if me:FindSpell(DisableSpell[me.name].Spell) and me:FindSpell(DisableSpell[me.name].Spell).level > 0 then
+				local dSpell = me:FindSpell(DisableSpell[me.name].Spell)
+				if dSpell and dSpell.level > 0 and dSpell:CanBeCasted() and me:CanCast() then
+					if target and GetDistance2D(me,target) < dSpell.castRange then
+						me:SafeCastAbility(dSpell,target)
+						activated = 1
+						sleepTick = GetTick() + 200
+						return
+					end
+				end
 			end
 		end
 	end

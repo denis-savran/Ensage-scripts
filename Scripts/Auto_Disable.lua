@@ -73,8 +73,8 @@ function Tick( tick )
 		local chanel = me:IsChanneling()
 		local blink = v:FindItem("item_blink")
 				
-		if v.alive and v.visible and not hero[i] then
-			if me.alive and not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
+		if me.alive and v.alive and v.visible and not hero[i] then
+			if not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
 				if blink and blink.cd > 11 then
 					UseHex()
 					UseSheepStickTarget()

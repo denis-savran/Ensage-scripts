@@ -8,12 +8,15 @@ require("libs.DisableSpells")
 
 local config = ScriptConfig.new()
 config:SetParameter("Active", "U", config.TYPE_HOTKEY)
+config:SetParameter("RightSide", false)
 config:Load()
 
 local toggleKey   = config.Active
+local RightSide   = config.RightSide
 local activ       = false
 local reg         = false
 local monitor     = client.screenSize.x/1600
+local indent 	  = 255
 local F14         = drawMgr:CreateFont("F14","Tahoma",11*monitor,550*monitor) 
 local statusText  = drawMgr:CreateText(3*monitor,75*monitor,-1,"(" .. string.char(toggleKey) .. ") Auto Disable: Blink",F14) statusText.visible = true
 local activated   = 0
@@ -35,7 +38,7 @@ function Key(msg,code)
 	end
 	
 	for i = 1,5 do
-		if IsMouseOnButton(265*monitor-3+i*27,11*monitor-1,20,20) then
+		if IsMouseOnButton(indent*monitor-3+i*27,11*monitor-1,20,20) then
 			if msg == LBUTTON_DOWN and hero[i] == nil then
 				hero[i] = i
 			elseif msg == LBUTTON_DOWN and hero[i] ~= nil then
@@ -55,6 +58,10 @@ function Tick( tick )
 	if not PlayingGame() then return end
 	if sleepTick and sleepTick > tick then return end	
 	me = entityList:GetMyHero() if not me then return end
+	
+	if RightSide then 
+		indent = 1330
+	end
 	
 	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,illusion=false})
 	table.sort( enemies, function (a,b) return a.playerId < b.playerId end )
@@ -129,9 +136,9 @@ function Tick( tick )
 		activated = 0
 		
 		if not icon[i] then icon[i] = {}
-			icon[i].board = drawMgr:CreateRect(265*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF)
-			icon[i].back = drawMgr:CreateRect(265*monitor-2+i*27,11*monitor,18,18,0x000000FF)
-			icon[i].mini = drawMgr:CreateRect(265*monitor-2+i*27,11*monitor,18,18,0x000000FF)
+			icon[i].board = drawMgr:CreateRect(indent*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF)
+			icon[i].back = drawMgr:CreateRect(indent*monitor-2+i*27,11*monitor,18,18,0x000000FF)
+			icon[i].mini = drawMgr:CreateRect(indent*monitor-2+i*27,11*monitor,18,18,0x000000FF)
 		end
 		
 		if not hero[i] then

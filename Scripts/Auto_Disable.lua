@@ -79,7 +79,28 @@ function Tick( tick )
 		local invis  = me:IsInvisible()
 		local chanel = me:IsChanneling()
 		local blink = v:FindItem("item_blink")
-				
+		
+		if me.alive and v.alive and v.visible then
+			if not (IV or MI or invis or chanel) then
+				if blink and blink.cd > 11 then
+					UseMedalliontarget()
+					UseRodtarget()
+				elseif activ then
+					UseMedalliontarget()
+					UseRodtarget()
+				elseif Initiation[v.name] then
+					if v:FindSpell(Initiation[v.name].Spell) and v:FindSpell(Initiation[v.name].Spell).level > 0 then
+						local iSpell = v:FindSpell(Initiation[v.name].Spell)
+						local iLevel = iSpell.level 
+						if iSpell and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
+							UseMedalliontarget()
+							UseRodtarget()
+						end
+					end
+				end
+			end
+		end
+
 		if me.alive and v.alive and v.visible and not hero[i] then
 			if not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
 				if blink and blink.cd > 11 then
@@ -95,8 +116,6 @@ function Tick( tick )
 					UseAstral()
 					UseHalberdtarget()
 					UseEtherealtarget()
-					UseRodtarget()
-					break
 				elseif activ then
 					UseHex()
 					UseSheepStickTarget()
@@ -107,8 +126,6 @@ function Tick( tick )
 					UsePucksRift()
 					UseEulScepterTarget()
 					UseAstral()
-					UseRodtarget()
-					break
 				elseif Initiation[v.name] then
 					if v:FindSpell(Initiation[v.name].Spell) and v:FindSpell(Initiation[v.name].Spell).level > 0 then
 						local iSpell = v:FindSpell(Initiation[v.name].Spell)
@@ -126,15 +143,13 @@ function Tick( tick )
 							UseAstral()
 							UseHalberdtarget()
 							UseEtherealtarget()
-							UseRodtarget()
-							break
 						end
 					end
 				end
 			end
 		end
 		activated = 0
-		
+
 		if not icon[i] then icon[i] = {}
 			icon[i].board = drawMgr:CreateRect(indent*monitor-3+i*27,11*monitor-1,20,20,0x8B008BFF)
 			icon[i].back = drawMgr:CreateRect(indent*monitor-2+i*27,11*monitor,18,18,0x000000FF)
@@ -188,7 +203,7 @@ function UseEulScepterTarget()
 			if target and GetDistance2D(me,target) < 700 then
 				me:CastAbility(euls,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -202,7 +217,7 @@ function UseSheepStickTarget()
 			if target and GetDistance2D(me,target) < 800 then
 				me:CastAbility(sheep,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -216,7 +231,7 @@ function UseOrchidtarget()
 			if target and GetDistance2D(me,target) < 900 then
 				me:CastAbility(orchid,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -230,7 +245,7 @@ function UseAbyssaltarget()
 			if target and GetDistance2D(me,target) < 140 then
 				me:CastAbility(abyssal_blade,target)
 				activated = 1 
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -244,7 +259,7 @@ function UseHalberdtarget()
 			if target and GetDistance2D(me,target) < 600 then
 				me:CastAbility(heavens_halberd,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -258,7 +273,7 @@ function UseEtherealtarget()
 			if target and GetDistance2D(me,target) < 800 then
 				me:CastAbility(ethereal_blade,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -267,18 +282,28 @@ end
 
 function UseRodtarget()
 	local rod_of_atos = me:FindItem("item_rod_of_atos")
-	if activated == 0 then
-		if rod_of_atos and rod_of_atos.cd == 0 then
-			if target and GetDistance2D(me,target) < 1200 then
-				me:CastAbility(rod_of_atos,target)
-				activated = 1
-				sleepTick = GetTick() + 200
+	if rod_of_atos and rod_of_atos.cd == 0 then
+		if target and GetDistance2D(me,target) < 1200 then
+			me:CastAbility(rod_of_atos,target)
+			sleepTick = GetTick() + 100
+			return
+		end
+	end
+end
+
+function UseMedalliontarget()
+	local medallion = me:FindItem("item_medallion_of_courage")
+	if me.health/me.maxHealth > 0.1 then
+		if medallion and medallion.cd == 0 then
+			if target and GetDistance2D(me,target) < 1000 then
+				me:CastAbility(medallion,target)
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
 	end
 end
-	
+
 function UseHex()
 	if activated == 0 then
 		local hex_lion  = me:FindSpell("lion_voodoo")
@@ -292,7 +317,7 @@ function UseHex()
 			if target and GetDistance2D(me,target) < 500 then
 				me:SafeCastAbility(hex,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -304,15 +329,15 @@ function UseAstral()
 		local astral_od = me:FindSpell("obsidian_destroyer_astral_imprisonment")
 		local astral_sd = me:FindSpell("shadow_demon_disruption")
 		if alstral_destr then
-			alstral = alstral_destr
+			local alstral = alstral_destr
 		elseif astral_sd then
-			astral = astral_sd
+			local astral = astral_sd
 		end
 		if astral and astral.level > 0 and astral:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < astral.castRange  then
 				me:SafeCastAbility(astral,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -324,15 +349,15 @@ function UseImmediateStun()
 		local tlknz = me:FindSpell("rubick_telekinesis")
 		local dtail = me:FindSpell("dragon_knight_dragon_tail")
 		if tlknz then
-			stun = tlknz
+			local stun = tlknz
 		elseif dtail then
-			stun = dtail
+			local stun = dtail
 		end
 		if stun and stun.level > 0 and stun:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < stun.castRange then
 				me:SafeCastAbility(stun,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -346,7 +371,7 @@ function UseSkysSeal()
 			if target and GetDistance2D(me,target) < silence.castRange then
 				me:SafeCastAbility(silence,target)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -360,7 +385,7 @@ function UsePucksRift()
 			if target and GetDistance2D(me,target) < 400 then
 				me:SafeCastAbility(silence)
 				activated = 1
-				sleepTick = GetTick() + 200
+				sleepTick = GetTick() + 100
 				return
 			end
 		end
@@ -376,7 +401,7 @@ function UseHeroSpell()
 					if target and GetDistance2D(me,target) < dSpell.castRange then
 						me:SafeCastAbility(dSpell,target)
 						activated = 1
-						sleepTick = GetTick() + 200
+						sleepTick = GetTick() + 100
 						return
 					end
 				end

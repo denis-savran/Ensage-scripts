@@ -28,7 +28,7 @@ sleepTick = nil
 function Key(msg,code)
 	if not PlayingGame() or client.chat then return end
 	
-	if IsKeyDown(toggleKey) then
+	if code == toggleKey then
 		activ = not activ
 		if activ then
 			statusText.text = "(" .. string.char(toggleKey) .. ") Auto Disable: All"

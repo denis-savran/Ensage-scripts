@@ -29,7 +29,7 @@ Spell = "furion_teleportation",
 },]]
 
 npc_dota_hero_phantom_lancer = {
-Spell = "phantom_lancer_doppelganger",
+Spell = "phantom_lancer_doppelwalk",
 },
 
 npc_dota_hero_terrorblade = {

@@ -26,11 +26,9 @@ local hero = {} local icon = {}
 sleepTick = nil
  
 function Key(msg,code)
-	if msg ~= KEY_UP or not PlayingGame() or client.chat then
-		return
-	end
+	if not PlayingGame() or client.chat then return end
 	
-	if code == toggleKey then
+	if IsKeyDown(toggleKey) then
 		activ = not activ
 		if activ then
 			statusText.text = "(" .. string.char(toggleKey) .. ") Auto Disable: All"

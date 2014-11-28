@@ -17,8 +17,8 @@ local activ       = false
 local reg         = false
 local monitor     = client.screenSize.x/1600
 local indent 	  = 255
-local F14         = drawMgr:CreateFont("F14","Tahoma",11*monitor,550*monitor) 
-local statusText  = drawMgr:CreateText(3*monitor,75*monitor,-1,"(" .. string.char(toggleKey) .. ") Auto Disable: Blink",F14) statusText.visible = true
+local F11         = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
+local statusText  = drawMgr:CreateText(3*monitor,75*monitor,-1,"(" .. string.char(toggleKey) .. ") Auto Disable: Blink",F11) statusText.visible = true
 local activated   = 0
 
 local hero = {} local icon = {}

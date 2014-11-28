@@ -75,8 +75,10 @@ function Tick( tick )
 				local dmg = math.floor((distance/100)*ultdmg[ult.level]*0.75)
 				if manaleft > 0 then
 					cursorText2.text = "dmg:"..dmg
+					sleepTick = GetTick()
 				else
 					cursorText2.text = "dmg:0"
+					sleepTick = GetTick()
 				end				
 			end	
 		end

@@ -92,7 +92,7 @@ function Tick( tick )
 					if v:FindSpell(Initiation[v.name].Spell) and v:FindSpell(Initiation[v.name].Spell).level > 0 then
 						local iSpell = v:FindSpell(Initiation[v.name].Spell)
 						local iLevel = iSpell.level 
-						if iSpell and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
+						if iSpell and iSpell.cd > iSpell:GetCooldown(iLevel) - 1.6 then
 							UseMedalliontarget()
 							UseRodtarget()
 						end
@@ -130,7 +130,7 @@ function Tick( tick )
 					if v:FindSpell(Initiation[v.name].Spell) and v:FindSpell(Initiation[v.name].Spell).level > 0 then
 						local iSpell = v:FindSpell(Initiation[v.name].Spell)
 						local iLevel = iSpell.level 
-						if iSpell and iSpell.cd > iSpell:GetCooldown(iLevel) - 1 then
+						if iSpell and iSpell.cd > iSpell:GetCooldown(iLevel) - 1.6 then
 							UseHex()
 							UseSheepStickTarget()
 							UseImmediateStun()

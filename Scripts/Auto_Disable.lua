@@ -78,10 +78,11 @@ function Tick( tick )
 		local DA  = v:IsDisarmed()
 		local invis  = me:IsInvisible()
 		local chanel = me:IsChanneling()
-		local blink = v:FindItem("item_blink")
+		local items  = me:CanUseItems()
+		local blink  = v:FindItem("item_blink")
 		
 		if me.alive and v.alive and v.visible then
-			if not (IV or MI or invis or chanel) then
+			if items and not (IV or MI or invis or chanel) then
 				if blink and blink.cd > 11 then
 					UseMedalliontarget()
 					UseRodtarget()
@@ -102,7 +103,7 @@ function Tick( tick )
 		end
 
 		if me.alive and v.alive and v.visible and not hero[i] then
-			if not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
+			if items and not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
 				if blink and blink.cd > 11 then
 					UseHex()
 					UseSheepStickTarget()

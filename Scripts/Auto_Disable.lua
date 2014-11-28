@@ -13,7 +13,7 @@ config:Load()
 
 local toggleKey   = config.Active
 local RightSide   = config.RightSide
-local activ       = false
+local active       = false
 local reg         = false
 local monitor     = client.screenSize.x/1600
 local indent 	  = 255
@@ -29,8 +29,8 @@ function Key(msg,code)
 	if not PlayingGame() or client.chat then return end
 	
 	if IsKeyDown(toggleKey) then
-		activ = not activ
-		if activ then
+		active = not active
+		if active then
 			statusText.text = "(" .. string.char(toggleKey) .. ") Auto Disable: All"
 		else
 			statusText.text = "(" .. string.char(toggleKey) .. ") Auto Disable: Blink"
@@ -85,7 +85,7 @@ function Tick( tick )
 				if blink and blink.cd > 11 then
 					UseMedalliontarget()
 					UseRodtarget()
-				elseif activ then
+				elseif active then
 					UseMedalliontarget()
 					UseRodtarget()
 				elseif Initiation[v.name] then
@@ -116,7 +116,7 @@ function Tick( tick )
 					UseAstral()
 					UseHalberdtarget()
 					UseEtherealtarget()
-				elseif activ then
+				elseif active then
 					UseHex()
 					UseSheepStickTarget()
 					UseImmediateStun()

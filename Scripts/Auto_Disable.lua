@@ -13,7 +13,7 @@ config:Load()
 
 local toggleKey   = config.Active
 local RightSide   = config.RightSide
-local active       = false
+local active      = false
 local reg         = false
 local monitor     = client.screenSize.x/1600
 local indent 	  = 255

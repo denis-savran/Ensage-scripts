@@ -1,4 +1,4 @@
---<<Shows mana that you will have after using ult on mouse position>>
+--<<Show mana left and dmg dealt if use ult on mouse position>>
 --===By Blaxpirit===--
 
 require("libs.Utils")

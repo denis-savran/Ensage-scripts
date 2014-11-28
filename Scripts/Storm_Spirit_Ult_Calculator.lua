@@ -53,31 +53,30 @@ function Tick( tick )
 	end
 	
 	if active then
+		collectgarbage("collect")
 		local cursor = client.mousePosition
 		local distance = GetDistance2D(me,cursor)
 		local ult = me:GetAbility(4)
 	
-		if cursor and me.alive and ult.level > 0 then
+		if me.alive and ult.level > 0 then
 			local mx = client.mouseScreenPosition.x
 			local my = client.mouseScreenPosition.y
-			local cursorText = drawMgr:CreateText(mx-10,my-32, 0xFFFFFF99, "",F15) cursorText.visible = true
+			local cursorText = drawMgr:CreateText(mx-10,my-32, 0x33CCFFAA, "",F15) cursorText.visible = true
 			local mananeeded = math.floor((me.maxMana*0.07 + 15) + (distance/100)*(me.maxMana*0.0075 + 12) - me.manaRegen*(distance/speed[ult.level]+1.9))
 			local manaleft = math.floor(me.mana - mananeeded)
 			if manaleft > 0 then
 				cursorText.text = "mp:"..manaleft
-				sleepTick = GetTick() 
+				sleepTick = GetTick()
 			else
-				cursorText.text = "mp:not enough"
-				sleepTick = GetTick() 
+				cursorText = drawMgr:CreateText(mx-10,my-32, 0x8B008BFF, "",F15)
+				cursorText.text = "not enough"
+				sleepTick = GetTick()
 			end
 			if ShowDmg then 
-				local cursorText2 = drawMgr:CreateText(mx-10,my-18, 0xFFFFFF99, "",F15) cursorText2.visible = true
+				local cursorText2 = drawMgr:CreateText(mx-10,my-18, 0xFF0000AA, "",F15) cursorText2.visible = true
 				local dmg = math.floor((distance/100)*ultdmg[ult.level]*0.75)
 				if manaleft > 0 then
 					cursorText2.text = "dmg:"..dmg
-					sleepTick = GetTick()
-				else
-					cursorText2.text = "dmg:0"
 					sleepTick = GetTick()
 				end				
 			end	

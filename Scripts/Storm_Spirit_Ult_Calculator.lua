@@ -9,7 +9,7 @@ config:SetParameter("Active", "U", config.TYPE_HOTKEY)
 config:Load()
 
 local toggleKey   = config.Active
-local active       = true
+local active      = true
 local myhero 	  = nil
 local reg         = false
 local monitor     = client.screenSize.x/1600

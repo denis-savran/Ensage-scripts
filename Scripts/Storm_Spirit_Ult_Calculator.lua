@@ -62,7 +62,7 @@ function Tick( tick )
 			local mx = client.mouseScreenPosition.x
 			local my = client.mouseScreenPosition.y
 			local cursorText = drawMgr:CreateText(mx-10,my-32, 0x33CCFFAA, "",F15) cursorText.visible = true
-			local mananeeded = math.floor((me.maxMana*0.07 + 15) + (distance/100)*(me.maxMana*0.0075 + 12) - me.manaRegen*(distance/speed[ult.level]+1.9))
+			local mananeeded = math.floor((me.maxMana*0.07 + 15) + (distance/100)*(me.maxMana*0.0075 + 12) - me.manaRegen*(distance/speed[ult.level]+1))
 			local manaleft = math.floor(me.mana - mananeeded)
 			if manaleft > 0 then
 				cursorText.text = "mp:"..manaleft

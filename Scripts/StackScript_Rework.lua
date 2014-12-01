@@ -192,8 +192,28 @@ function isPosEqual(v1, v2, d)
 	return (v1-v2).length <= d
 end
 
--- reset all stuff after leaving a game
-function Close()
+function GenerateSideMessage(heroname,msg)
+	local sidemsg = sideMessage:CreateMessage(300*monitor,60*monitor,0x111111C0,0x444444FF,200,1500)
+	sidemsg:AddElement(drawMgr:CreateRect(10*monitor,10*monitor,72*monitor,40*monitor,0xFFFFFFFF,drawMgr:GetTextureId("NyanUI/heroes_horizontal/"..heroname:gsub("npc_dota_hero_",""))))
+	sidemsg:AddElement(drawMgr:CreateText(85*monitor,20*monitor,-1,"" .. msg,F15))
+end
+
+function Load()
+	if PlayingGame() then
+		local me = entityList:GetMyHero()
+		if not me then
+			script:Disable()
+		else
+			registered = true
+			text.visible = true
+			script:RegisterEvent(EVENT_TICK,Tick)
+			script:RegisterEvent(EVENT_KEY,Key)
+			script:UnregisterEvent(Load)
+		end
+	end
+end
+
+function GameClose()
 	text.text = defaultText
 	text.visible = false
 	creepHandle = nil
@@ -202,36 +222,14 @@ function Close()
 	ordered = false
 	satyr = false
 	collectgarbage("collect")
-	script:UnregisterEvent(EVENT_TICK)
-	script:UnregisterEvent(EVENT_KEY)
-	registered = false
-end
-
--- register our callbacks
-function Load()
-	if registered then return end
-	local me = entityList:GetMyHero()
-	if not me then
-		script:Disable()
-	else
-		script:RegisterEvent(EVENT_TICK,Tick)
-		script:RegisterEvent(EVENT_KEY,Key)
-		text.visible = true
-		registered = true
+	if registered then
+		myhero = nil
+		script:UnregisterEvent(Tick)
+		script:UnregisterEvent(Key)
+		script:RegisterEvent(EVENT_TICK,Load)
+		registered = false
 	end
 end
 
-function GenerateSideMessage(heroname,msg)
-	local sidemsg = sideMessage:CreateMessage(300*monitor,60*monitor,0x111111C0,0x444444FF,200,1500)
-	sidemsg:AddElement(drawMgr:CreateRect(10*monitor,10*monitor,72*monitor,40*monitor,0xFFFFFFFF,drawMgr:GetTextureId("NyanUI/heroes_horizontal/"..heroname:gsub("npc_dota_hero_",""))))
-	sidemsg:AddElement(drawMgr:CreateText(85*monitor,20*monitor,-1,"" .. msg,F15))
-end
-
--- Callbacks are only needed while ingame...
-script:RegisterEvent(EVENT_CLOSE,Close)
-script:RegisterEvent(EVENT_LOAD,Load)
-
--- load if already ingame
-if client.connected and not client.loading then
-	Load()
-end
+script:RegisterEvent(EVENT_CLOSE,GameClose)
+script:RegisterEvent(EVENT_TICK,Load)

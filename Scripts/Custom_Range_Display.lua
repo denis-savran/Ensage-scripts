@@ -86,7 +86,6 @@ function Load()
 end
 
 function GameClose()
-	statusText.visible = false
 	effect = nil
 	collectgarbage("collect")
 	if reg then

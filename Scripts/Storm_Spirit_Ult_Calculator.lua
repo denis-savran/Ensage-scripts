@@ -18,7 +18,7 @@ local reg         = false
 local monitor     = client.screenSize.x/1600
 local F11         = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
 local F15         = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor) 
-local statusText  = drawMgr:CreateText(3*monitor,85*monitor,-1,"(" .. string.char(toggleKey) .. ") Storm Spirit: On",F11) statusText.visible = false
+local statusText  = drawMgr:CreateText(3*monitor,107*monitor,-1,"(" .. string.char(toggleKey) .. ") Storm Spirit: On",F11) statusText.visible = false
 
 sleepTick = nil
 speed  = {1250,1875,2500}
@@ -91,6 +91,7 @@ function Load()
 			script:Disable()
 		else
 			reg = true
+			statusText.visible = true
 			myhero = me.classId
 			script:RegisterEvent(EVENT_TICK,Tick)
 			script:RegisterEvent(EVENT_KEY,Key)
@@ -100,6 +101,9 @@ function Load()
 end
 
 function GameClose()
+	statusText.visible = false
+	cursorText.visible = false
+	cursorText2.visible = false
 	collectgarbage("collect")
 	if reg then
 		myhero = nil
@@ -107,7 +111,6 @@ function GameClose()
 		script:UnregisterEvent(Key)
 		script:RegisterEvent(EVENT_TICK,Load)
 		reg = false
-		statusText.visible = false
 	end
 end
 

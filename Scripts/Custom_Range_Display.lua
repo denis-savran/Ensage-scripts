@@ -14,7 +14,7 @@ decrease = config.Decrease
 
 local monitor = client.screenSize.x/1600
 local F11 = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
-local statusText = drawMgr:CreateText(4*monitor,51*monitor,-1,"Custom range: off",F11) statusText.visible = true
+local statusText = drawMgr:CreateText(4*monitor,51*monitor,-1,"Custom range: off",F11) statusText.visible = false
 
 local reg = false
 local activated = false

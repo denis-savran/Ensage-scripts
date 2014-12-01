@@ -16,9 +16,13 @@ local active      = true
 local myhero 	  = nil
 local reg         = false
 local monitor     = client.screenSize.x/1600
+local mx = client.mouseScreenPosition.x
+local my = client.mouseScreenPosition.y
 local F11         = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
 local F15         = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor) 
 local statusText  = drawMgr:CreateText(3*monitor,107*monitor,-1,"(" .. string.char(toggleKey) .. ") Storm Spirit: On",F11) statusText.visible = false
+local cursorText  = drawMgr:CreateText(mx-10,my-32, 0x33CCFFAA, "",F15) cursorText.visible = false
+local cursorText2 = drawMgr:CreateText(mx-10,my-18, 0xFF0000AA, "",F15) cursorText2.visible = false
 
 sleepTick = nil
 speed  = {1250,1875,2500}
@@ -59,9 +63,7 @@ function Tick( tick )
 		local ult = me:GetAbility(4)
 	
 		if me.alive and ult.level > 0 then
-			local mx = client.mouseScreenPosition.x
-			local my = client.mouseScreenPosition.y
-			local cursorText = drawMgr:CreateText(mx-10,my-32, 0x33CCFFAA, "",F15) cursorText.visible = true
+			cursorText.visible = true
 			local mananeeded = math.floor((me.maxMana*0.07 + 15) + (distance/100)*(me.maxMana*0.0075 + 12) - me.manaRegen*(distance/speed[ult.level]+1))
 			local manaleft = math.floor(me.mana - mananeeded)
 			if manaleft > 0 then
@@ -73,7 +75,7 @@ function Tick( tick )
 				sleepTick = GetTick()
 			end
 			if ShowDmg then 
-				local cursorText2 = drawMgr:CreateText(mx-10,my-18, 0xFF0000AA, "",F15) cursorText2.visible = true
+				cursorText2.visible = true
 				local dmg = math.floor((distance/100)*ultdmg[ult.level]*0.75)
 				if manaleft > 0 then
 					cursorText2.text = "dmg:"..dmg

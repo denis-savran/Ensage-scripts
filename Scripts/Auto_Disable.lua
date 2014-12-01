@@ -18,7 +18,7 @@ local reg         = false
 local monitor     = client.screenSize.x/1600
 local indent 	  = 255
 local F11         = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
-local statusText  = drawMgr:CreateText(3*monitor,75*monitor,-1,"(" .. string.char(toggleKey) .. ") Auto Disable: Blink",F11) statusText.visible = true
+local statusText  = drawMgr:CreateText(3*monitor,75*monitor,-1,"(" .. string.char(toggleKey) .. ") Auto Disable: Blink",F11) statusText.visible = false
 local activated   = 0
 
 local hero = {} local icon = {}
@@ -173,6 +173,7 @@ function Load()
 			script:Disable()
 		else
 			reg = true
+			statusText.visible = true
 			script:RegisterEvent(EVENT_TICK,Tick)
 			script:RegisterEvent(EVENT_KEY,Key)
 			script:UnregisterEvent(Load)
@@ -181,6 +182,7 @@ function Load()
 end
 
 function GameClose()
+	statusText.visible = false
 	hero = {} icon = {}
 	collectgarbage("collect")
 	if reg then
@@ -188,7 +190,6 @@ function GameClose()
 		script:UnregisterEvent(Key)
 		script:RegisterEvent(EVENT_TICK,Load)
 		reg = false
-		statusText.visible = false
 	end
 end
 

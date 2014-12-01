@@ -20,7 +20,8 @@ increasenumber = config.IncreaseNumber
 x,y = 5, 50
 
 local monitor = client.screenSize.x/1600
-local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
+local F11 = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
+local F15 = drawMgr:CreateFont("F11","Tahoma",15*monitor,550*monitor) 
 
 r_startTime = 48.5  -- game time seconds when start to stack (from wait point)
 r_satyr_startTime = 48
@@ -41,13 +42,14 @@ stack_route_dire_satyr =    {Vector(3969,-698,127), Vector(2169,-596,127), Vecto
 
 activated = true -- toggle by hotkey if activated
 creepHandle = nil -- current creep
-font = drawMgr:CreateFont("stackfont","Arial",14,500) -- font for drawing
+
 if string.byte("A") <= hotkey and hotkey <= string.byte("Z") then
 	defaultText = "StackScript: select your creep and press \""..string.char(hotkey).."\"." -- default text to display
 else
 	defaultText = "StackScript: select your creep and press keycode \""..hotkey.."\"." -- default text to display
 end
-text = drawMgr:CreateText(x,y,-1,defaultText,font) -- text object to draw
+
+text = drawMgr:CreateText(x,y,-1,defaultText,F11) -- text object to draw
 route = nil -- currently active route
 ordered = false -- only order once
 satyr = false
@@ -199,7 +201,7 @@ function Close()
 	activated = false
 	ordered = false
 	satyr = false
-
+	collectgarbage("collect")
 	script:UnregisterEvent(EVENT_TICK)
 	script:UnregisterEvent(EVENT_KEY)
 	registered = false
@@ -208,11 +210,15 @@ end
 -- register our callbacks
 function Load()
 	if registered then return end
-
-	script:RegisterEvent(EVENT_TICK,Tick)
-	script:RegisterEvent(EVENT_KEY,Key)
-	text.visible = true
-	registered = true
+	local me = entityList:GetMyHero()
+	if not me then
+		script:Disable()
+	else
+		script:RegisterEvent(EVENT_TICK,Tick)
+		script:RegisterEvent(EVENT_KEY,Key)
+		text.visible = true
+		registered = true
+	end
 end
 
 function GenerateSideMessage(heroname,msg)

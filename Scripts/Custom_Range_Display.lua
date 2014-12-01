@@ -12,12 +12,13 @@ range = 400
 extend = config.Extend
 decrease = config.Decrease
 
-local xx,yy = 10,client.screenSize.y/25.714
-local F14 = drawMgr:CreateFont("f14","Tahoma",14,550)
-local statusText = drawMgr:CreateText(xx-5,yy+28,-1,"Custom range: off",F14)
+local monitor = client.screenSize.x/1600
+local F11 = drawMgr:CreateFont("F11","Tahoma",11*monitor,550*monitor) 
+local statusText = drawMgr:CreateText(4*monitor,51*monitor,-1,"Custom range: off",F11) statusText.visible = true
 
-activated = false
-effect = nil
+local reg = false
+local activated = false
+local effect = nil
 
 function Key(msg,code)
 	-- check if ingame
@@ -45,6 +46,7 @@ function Key(msg,code)
 		end
 	end
 	if activated then
+		collectgarbage("collect")
 		if msg == KEY_UP then
 			 -- Editing range 
 			if code == extend then
@@ -69,5 +71,30 @@ function RemoveEffect()
 	collectgarbage("collect")
 end
  
-script:RegisterEvent(EVENT_CLOSE,RemoveEffect) -- remove effect on game close
-script:RegisterEvent(EVENT_KEY,Key)
+function Load()
+	if PlayingGame() then
+		local me = entityList:GetMyHero()
+		if not me then 
+			script:Disable()
+		else
+			reg = true
+			statusText.visible = true
+			script:RegisterEvent(EVENT_KEY,Key)
+			script:UnregisterEvent(Load)
+		end
+	end
+end
+
+function GameClose()
+	statusText.visible = false
+	effect = nil
+	collectgarbage("collect")
+	if reg then
+		script:UnregisterEvent(Key)
+		script:RegisterEvent(EVENT_TICK,Load)
+		reg = false
+	end
+end 
+ 
+script:RegisterEvent(EVENT_CLOSE,GameClose)
+script:RegisterEvent(EVENT_TICK,Load)

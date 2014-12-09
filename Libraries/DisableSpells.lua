@@ -54,4 +54,7 @@ Spell = "ogre_magi_fireblast"},]]
 --[[npc_dota_hero_tusk = {
 Spell = "death_prophet_silence"},]]
 
+npc_dota_hero_oracle = {
+Spell = "oracle_fates_edict"},
+
 }

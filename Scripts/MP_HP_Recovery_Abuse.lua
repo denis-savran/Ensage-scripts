@@ -58,6 +58,7 @@ function DropItems()
 		local soulring = me:FindItem("item_soul_ring")
 		local lowstick = me:FindItem("item_magic_stick")
 		local gradestick = me:FindItem("item_magic_wand")
+		local mek = me:FindItem("item_mekansm")
 		local bottle = me:FindItem("item_bottle")
 		local invis = me:IsInvisible()
 		local chanel = me:IsChanneling()
@@ -79,10 +80,18 @@ function DropItems()
 					mp:DropItem(v,me.position)
 				end
 				if bonusStrength or bonusMana or bonusHealth or bonusIntellect or bonusAll then
-					if aboots and aboots.cd == 0 then
+					if aboots and aboots.cd == 0 and me.mana ~= me.maxMana then
 						if v.name ~= "item_arcane_boots" then
 							mp:DropItem(v,me.position)
 						end
+					elseif mek and mek.cd == 0 and me.health ~= me.maxHealth then
+						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
+							mp:DropItem(v,me.position)
+						else 
+							if v.name ~= "item_mekansm" then
+								mp:DropItem(v,me.position)
+							end
+						end 
 					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
 							mp:DropItem(v,me.position)
@@ -101,6 +110,9 @@ function DropItems()
 		if cuseitems and not (invis and chanel) then
 			if aboots and aboots.cd == 0 and me.mana ~= me.maxMana then
 				me:SafeCastItem("item_arcane_boots")
+				sleepTick = GetTick() + 1000
+			elseif mek and mek.cd == 0 and me.health ~= me.maxHealth then
+				me:SafeCastItem(mek)
 				sleepTick = GetTick() + 1000
 			elseif soulring and soulring.cd == 0 and me.mana ~= me.maxMana then
 				me:SafeCastItem("item_soul_ring")

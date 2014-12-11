@@ -112,7 +112,7 @@ function DropItems()
 				me:SafeCastItem("item_arcane_boots")
 				sleepTick = GetTick() + 1000
 			elseif mek and mek.cd == 0 and me.health ~= me.maxHealth then
-				me:SafeCastItem(mek)
+				me:SafeCastItem("item_mekansm")
 				sleepTick = GetTick() + 1000
 			elseif soulring and soulring.cd == 0 and me.mana ~= me.maxMana then
 				me:SafeCastItem("item_soul_ring")

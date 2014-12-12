@@ -7,10 +7,12 @@ require("libs.ScriptConfig")
 config = ScriptConfig.new()
 config:SetParameter("Hotkey", "B", config.TYPE_HOTKEY)
 config:SetParameter("DropTBorBlink", "N", config.TYPE_HOTKEY)
+config:SetParameter("Turnflag", true)
 config:Load()
 
 local toggleKey = config.Hotkey
 local droptbandblink = config.DropTBorBlink
+local turnflag = config.Turnflag
 local reg = false
 local active = false
 
@@ -74,34 +76,34 @@ function DropItems()
 			
 			if not chanel then
 				if v.name  == "item_power_treads" and treads and (treads.bootsState == 0 or treads.bootsState == 1) then
-					mp:DropItem(treads,me.position)
+					mp:DropItem(treads,me.position,turnflag)
 				end
 				if v.name == "item_refresher" then
-					mp:DropItem(v,me.position)
+					mp:DropItem(v,me.position,turnflag)
 				end
 				if bonusStrength or bonusMana or bonusHealth or bonusIntellect or bonusAll then
 					if aboots and aboots.cd == 0 and me.mana ~= me.maxMana then
 						if v.name ~= "item_arcane_boots" then
-							mp:DropItem(v,me.position)
+							mp:DropItem(v,me.position,turnflag)
 						end
 					elseif mek and mek.cd == 0 and me.health ~= me.maxHealth then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
-							mp:DropItem(v,me.position)
+							mp:DropItem(v,me.position,turnflag)
 						else 
 							if v.name ~= "item_mekansm" then
-								mp:DropItem(v,me.position)
+								mp:DropItem(v,me.position,turnflag)
 							end
 						end 
 					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
-							mp:DropItem(v,me.position)
+							mp:DropItem(v,me.position,turnflag)
 						else 
 							if v.name ~= "item_magic_wand" then
-								mp:DropItem(v,me.position)
+								mp:DropItem(v,me.position,turnflag)
 							end
 						end
 					else 
-						mp:DropItem(v,me.position)
+						mp:DropItem(v,me.position,turnflag)
 					end
 				end	
 			end
@@ -137,10 +139,10 @@ function ProDrop()
 	local chanel = me:IsChanneling()
 	if me.alive and not chanel then
 		if tranquilboots then 
-			mp:DropItem(tranquilboots,me.position)
+			mp:DropItem(tranquilboots,me.position,turnflag)
 		end
 		if blink then
-			mp:DropItem(blink,me.position)
+			mp:DropItem(blink,me.position,turnflag)
 		end
 	end
 end
@@ -148,7 +150,7 @@ end
 function PickUpItems()
 	local DroppedItems = entityList:FindEntities({type=LuaEntity.TYPE_ITEM_PHYSICAL})
 	for i,v in ipairs(DroppedItems) do
-		mp:TakeItem(v)
+		mp:TakeItem(v,turnflag)
 	end
 end
 

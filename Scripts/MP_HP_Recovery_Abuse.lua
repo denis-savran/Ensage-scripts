@@ -7,7 +7,7 @@ require("libs.ScriptConfig")
 config = ScriptConfig.new()
 config:SetParameter("Hotkey", "B", config.TYPE_HOTKEY)
 config:SetParameter("DropTBorBlink", "N", config.TYPE_HOTKEY)
-config:SetParameter("Turnflag", true)
+config:SetParameter("Turnflag", false)
 config:Load()
 
 local toggleKey = config.Hotkey

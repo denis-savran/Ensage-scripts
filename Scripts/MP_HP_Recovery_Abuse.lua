@@ -84,24 +84,33 @@ function DropItems()
 			local treads = me:FindItem("item_power_treads")
 			
 			if not chanel then
-				if v.name  == "item_power_treads" and treads and (treads.bootsState == 0 or treads.bootsState == 1) then
+				if v.name  == "item_power_treads" and treads and ((treads.bootsState == 0 and me.health ~= me.maxHealth) or (treads.bootsState == 1 and me.mana ~= me.maxMana)) then
 					mp:DropItem(treads,me.position,turnflag)
 				end
-				if v.name == "item_refresher" then
+				if v.name == "item_refresher" and me.mana ~= me.maxMana then
 					mp:DropItem(v,me.position,turnflag)
 				end
-				if bonusStrength or bonusMana or bonusHealth or bonusIntellect or bonusAll then
-					if aboots and aboots.cd == 0 and me.mana ~= me.maxMana then
+				if bonusMana or bonusIntellect or bonusAll and me.mana ~= me.maxMana then
+					if aboots and aboots.cd == 0 then
 						if v.name ~= "item_arcane_boots" then
 							mp:DropItem(v,me.position,turnflag)
 						end
-					elseif mek and mek.cd == 0 and me.health ~= me.maxHealth then
+					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
 							mp:DropItem(v,me.position,turnflag)
 						else 
-							if v.name ~= "item_mekansm" then
+							if v.name ~= "item_magic_wand" then
 								mp:DropItem(v,me.position,turnflag)
 							end
+						end
+					else 
+						mp:DropItem(v,me.position,turnflag)
+					end
+				end
+				if bonusStrength or bonusHealth or bonusAll and me.health ~= me.maxHealth then
+					if mek and mek.cd == 0 then
+						if v.name ~= "item_mekansm" then
+								mp:DropItem(v,me.position,turnflag)
 						end 
 					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
@@ -114,7 +123,7 @@ function DropItems()
 					else 
 						mp:DropItem(v,me.position,turnflag)
 					end
-				end	
+				end
 			end
 		end
 
@@ -128,15 +137,15 @@ function DropItems()
 			elseif soulring and soulring.cd == 0 and me.mana ~= me.maxMana then
 				me:SafeCastItem("item_soul_ring")
 				sleepTick = GetTick() + 0
+			elseif bottle and bottle.charges > 0 and bottle.cd == 0 then
+				me:SafeCastItem("item_bottle")
+				sleepTick = GetTick() + 3000
 			elseif lowstick and lowstick.charges > 0 and lowstick.cd == 0 then
 				me:SafeCastItem("item_magic_stick")
 				sleepTick = GetTick() + 0
 			elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 				me:SafeCastItem("item_magic_wand")
 				sleepTick = GetTick() + 1000
-			elseif bottle and bottle.charges > 0 and bottle.cd == 0 then
-				me:SafeCastItem("item_bottle")
-				sleepTick = GetTick() + 3000
 			end
 		end
 	end	

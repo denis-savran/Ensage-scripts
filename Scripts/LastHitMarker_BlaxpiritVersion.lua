@@ -80,7 +80,7 @@ function LastHitMarker(v,damage)
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Coin")
 			end
 			rect[v.handle].visible = true
-		elseif v.visible and v.alive and v.health > (damage*(1-v.dmgResist)) and v.health < (1.5*damage*(1-v.dmgResist)) then					
+		elseif v.visible and v.alive and v.health > (damage*(1-v.dmgResist)) and v.health < (2*damage*(1-v.dmgResist)) then					
 			if v.team == me.team then
 				rect[v.handle].w = 20*ex
 				rect[v.handle].h = 20*ex

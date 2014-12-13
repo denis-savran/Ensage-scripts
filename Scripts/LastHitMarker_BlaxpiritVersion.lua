@@ -1,5 +1,6 @@
 --<<If the icon has become a color that mean that creep dies from your attack>>
 --===Modified D.L.'s script By Blaxpirit===--
+
 require("libs.Utils")
 
 local rect = {}

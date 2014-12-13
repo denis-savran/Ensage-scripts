@@ -90,6 +90,9 @@ function DropItems()
 				if v.name == "item_refresher" and me.mana ~= me.maxMana then
 					mp:DropItem(v,me.position,turnflag)
 				end
+				if v.name == "item_ancient_janggo" then
+					mp:DropItem(v,me.position,turnflag)
+				end
 				if bonusMana or bonusIntellect or bonusAll and me.mana ~= me.maxMana then
 					if aboots and aboots.cd == 0 then
 						if v.name ~= "item_arcane_boots" then

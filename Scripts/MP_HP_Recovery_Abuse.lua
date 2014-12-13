@@ -21,24 +21,26 @@ sleepTick = nil
 function Key(msg,code)
 	if not PlayingGame() or client.chat then return end
 	
-	if active then
-		if msg == KEY_DOWN then
+	if msg == KEY_DOWN then
+		if active then
 			if code == toggleKey then
+				mp:HoldPosition()
 				DropItems()
 			end
-		end	
-	end
-	if msg == KEY_DOWN then
+		end
 		if code == droptbandblink then
+			mp:HoldPosition()
 			ProDrop()
 		end
-	end
+	end	
 	if msg == KEY_UP then
 		if code == toggleKey then
 			PickUpItems()
+			mp:Move(client.mousePosition)
 		end
 		if code == droptbandblink then
 			PickUpItems()
+			mp:Move(client.mousePosition)
 		end
 	end
 end
@@ -50,8 +52,15 @@ function Tick( tick )
 	if sleepTick and sleepTick > tick then
 		active = false 
 	else
-		active = true 
+		active = true
 	end
+	
+	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = me:GetEnemyTeam(),alive=true,visible=true})
+	for i,v in ipairs(enemies) do
+		if GetDistance2D(me,v) < 875 then
+			active = false
+		end
+	end 
 end	
 	
 function DropItems()

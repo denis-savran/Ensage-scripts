@@ -195,7 +195,7 @@ end
 script:RegisterEvent(EVENT_CLOSE,GameClose)
 script:RegisterEvent(EVENT_TICK,Load)
     
---use item or skill------------------------------------------------------------
+--functions for item or skill usage------------------------------------------------------------
     
 function UseEulScepterTarget()
 	local euls = me:FindItem("item_cyclone")

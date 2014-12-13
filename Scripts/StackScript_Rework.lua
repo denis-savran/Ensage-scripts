@@ -1,5 +1,5 @@
 --<<Stacks ancient camps>>
--- Stackscript rework by blaxpirit123 
+--===Rework By Blaxpirit===-- 
 
 --[[		Config			]]
 -- config can be found in Scripts\config\StackScript_Rework.txt

@@ -1,10 +1,6 @@
 --<<Stacks ancient camps>>
 --===Rework By Blaxpirit===-- 
 
---[[		Config			]]
--- config can be found in Scripts\config\StackScript_Rework.txt
-
---[[		Code			]]
 require("libs.ScriptConfig")
 require("libs.SideMessage")
 

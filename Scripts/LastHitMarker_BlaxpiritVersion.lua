@@ -33,7 +33,7 @@ function Tick( tick )
 	for k,v in pairs(rastawards) do entities1[#entities1 + 1] = v end
 	for k,v in pairs(forge) do entities1[#entities1 + 1] = v end
 	for k,v in pairs(golem) do entities1[#entities1 + 1] = v end
-	--============================================================================
+	--=========================(\/)*_*(\/)========================================
 	local entities2 = {}
 	
 	local siege = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Siege})

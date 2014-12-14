@@ -62,7 +62,7 @@ end
 	
 function DropItems()
 	if me.alive and (me.mana ~= me.maxMana or me.health ~= me.maxHealth) then
-		sleepTick2 = GetTick() + 500
+		sleepTick2 = GetTick() + 1000
 		mp:HoldPosition()
 		local aboots = me:FindItem("item_arcane_boots")
 		local soulring = me:FindItem("item_soul_ring")
@@ -158,7 +158,7 @@ function ProDrop()
 	local tranquilboots = me:FindItem("item_tranquil_boots")
 	local chanel = me:IsChanneling()
 	if me.alive and not chanel then
-		sleepTick2 = GetTick() + 500
+		sleepTick2 = GetTick() + 1000
 		mp:HoldPosition()
 		if tranquilboots then 
 			mp:DropItem(tranquilboots,me.position,turnflag)

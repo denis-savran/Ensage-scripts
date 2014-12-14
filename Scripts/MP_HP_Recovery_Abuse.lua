@@ -62,7 +62,7 @@ end
 	
 function DropItems()
 	if me.alive and (me.mana ~= me.maxMana or me.health ~= me.maxHealth) then
-		sleepTick2 = GetTick() + 1000
+		sleepTick2 = GetTick() + 3250
 		mp:HoldPosition()
 		local aboots = me:FindItem("item_arcane_boots")
 		local soulring = me:FindItem("item_soul_ring")

@@ -15,8 +15,10 @@ local droptbandblink = config.DropTBorBlink
 local turnflag = config.Turnflag
 local reg = false
 local active = false
+local activated = false
 
 sleepTick = nil
+sleepTick2 = nil
 
 function Key(msg,code)
 	if not PlayingGame() or client.chat then return end
@@ -24,23 +26,19 @@ function Key(msg,code)
 	if msg == KEY_DOWN then
 		if active then
 			if code == toggleKey then
-				mp:HoldPosition()
 				DropItems()
 			end
 		end
 		if code == droptbandblink then
-			mp:HoldPosition()
 			ProDrop()
 		end
 	end	
 	if msg == KEY_UP then
 		if code == toggleKey then
 			PickUpItems()
-			mp:Move(client.mousePosition)
 		end
 		if code == droptbandblink then
 			PickUpItems()
-			mp:Move(client.mousePosition)
 		end
 	end
 end
@@ -55,16 +53,17 @@ function Tick( tick )
 		active = true
 	end
 	
-	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = me:GetEnemyTeam(),alive=true,visible=true})
-	for i,v in ipairs(enemies) do
-		if GetDistance2D(me,v) < 875 then
-			active = false
-		end
-	end 
+	if sleepTick2 and sleepTick2 > tick then
+		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 0")
+	else
+		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 1")
+	end
 end	
 	
 function DropItems()
 	if me.alive and (me.mana ~= me.maxMana or me.health ~= me.maxHealth) then
+		sleepTick2 = GetTick() + 500
+		mp:HoldPosition()
 		local aboots = me:FindItem("item_arcane_boots")
 		local soulring = me:FindItem("item_soul_ring")
 		local lowstick = me:FindItem("item_magic_stick")
@@ -159,6 +158,8 @@ function ProDrop()
 	local tranquilboots = me:FindItem("item_tranquil_boots")
 	local chanel = me:IsChanneling()
 	if me.alive and not chanel then
+		sleepTick2 = GetTick() + 500
+		mp:HoldPosition()
 		if tranquilboots then 
 			mp:DropItem(tranquilboots,me.position,turnflag)
 		end
@@ -173,6 +174,8 @@ function PickUpItems()
 	for i,v in ipairs(DroppedItems) do
 		mp:TakeItem(v,turnflag)
 	end
+	mp:Move(client.mousePosition)
+	sleepTick2 = GetTick() + 500
 end
 
 function Load()

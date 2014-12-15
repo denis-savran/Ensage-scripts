@@ -10,7 +10,7 @@ local ex = client.screenSize.x/1600
 function Tick( tick )
 
 	if client.console then return end	
-		
+
 	local mydamage = me.dmgMin + me.dmgBonus
 	local damage = Damage()
 	local dmgtobuildings = 0.5*(mydamage)

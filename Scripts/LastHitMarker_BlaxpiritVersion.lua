@@ -77,7 +77,7 @@ function LastHitMarker(v,damage)
 				rect[v.handle].w = 20*ex
 				rect[v.handle].h = 20*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Deny")
-			elseif v.health < (damage*(1-v.dmgResist)+1)
+			elseif v.health < (damage*(1-v.dmgResist)+1) then
 				rect[v.handle].w = 15*ex
 				rect[v.handle].h = 15*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Coin")
@@ -88,7 +88,7 @@ function LastHitMarker(v,damage)
 				rect[v.handle].w = 20*ex
 				rect[v.handle].h = 20*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Deny")
-			elseif v.health > (damage*(1-v.dmgResist)) and v.health < (2*damage*(1-v.dmgResist)) 
+			elseif v.health > (damage*(1-v.dmgResist)) and v.health < (2*damage*(1-v.dmgResist)) then
 				rect[v.handle].w = 15*ex
 				rect[v.handle].h = 15*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Coin")

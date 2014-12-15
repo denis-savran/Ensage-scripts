@@ -3,23 +3,20 @@
 
 require("libs.Utils")
 
-local rect = {}
-local sleep = 0
 local play = false
 local ex = client.screenSize.x/1600
 
 function Tick( tick )
 
-	if client.console or sleep > tick then return end	
-	
-	sleep = tick + 50
-	
+	if client.console then return end	
+		
 	local mydamage = me.dmgMin + me.dmgBonus
 	local damage = Damage()
 	local dmgtobuildings = 0.5*(mydamage)
 	
 	--========================<< ENTITIES >>======================================
 	local entities1 = {}
+	
 	local creeps = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Lane})
 	local neutrals = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Neutral})
 	
@@ -65,6 +62,7 @@ end
 function LastHitMarker(v,mydamage,damage)
 	local OnScreen = client:ScreenPosition(v.position)	
 	if OnScreen then
+		local rect = {}
 		local offset = v.healthbarOffset
 		if offset == -1 then return end			
 				
@@ -129,7 +127,6 @@ function Load()
 end
 
 function GameClose()
-	rect = {}
 	collectgarbage("collect")
 	if play then
 		script:UnregisterEvent(Tick)

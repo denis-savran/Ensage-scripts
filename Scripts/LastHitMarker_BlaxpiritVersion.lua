@@ -3,6 +3,7 @@
 
 require("libs.Utils")
 
+local rect = {}
 local play = false
 local ex = client.screenSize.x/1600
 
@@ -62,7 +63,6 @@ end
 function LastHitMarker(v,mydamage,damage)
 	local OnScreen = client:ScreenPosition(v.position)	
 	if OnScreen then
-		local rect = {}
 		local offset = v.healthbarOffset
 		if offset == -1 then return end			
 				
@@ -127,6 +127,7 @@ function Load()
 end
 
 function GameClose()
+	rect = {}
 	collectgarbage("collect")
 	if play then
 		script:UnregisterEvent(Tick)

@@ -14,8 +14,9 @@ function Tick( tick )
 	
 	sleep = tick + 50
 	
+	local mydamage = me.dmgMin + me.dmgBonus
 	local damage = Damage()
-	local dmgtobuildings = 0.5*(me.dmgMin + me.dmgBonus)
+	local dmgtobuildings = 0.5*(mydamage)
 	
 	--========================<< ENTITIES >>======================================
 	local entities1 = {}
@@ -51,12 +52,13 @@ function Tick( tick )
 	--============================================================================
 	
 	for i, v in ipairs(entities1) do
-		LastHitMarker(v,damage)
+		LastHitMarker(v,damage,mydamage)
 	end
 
 	for i, v in ipairs(entities2) do
+		mydamage = dmgtobuildings
 		damage = dmgtobuildings
-		LastHitMarker(v,damage)
+		LastHitMarker(v,damage,mydamage)
 	end		
 end
 
@@ -70,23 +72,23 @@ function LastHitMarker(v,damage)
 			rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 		end
 
-		if v.visible and v.alive and v.health > 0 and v.health < (damage*(1-v.dmgResist)+1) then						
-			if v.team == me.team then
+		if v.visible and v.alive and v.health > 0  then						
+			if v.team == me.team and v.health < (mydamage*(1-v.dmgResist)+1) then
 				rect[v.handle].w = 20*ex
 				rect[v.handle].h = 20*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Deny")
-			else
+			elseif v.health < (damage*(1-v.dmgResist)+1)
 				rect[v.handle].w = 15*ex
 				rect[v.handle].h = 15*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Coin")
 			end
 			rect[v.handle].visible = true
-		elseif v.visible and v.alive and v.health > (damage*(1-v.dmgResist)) and v.health < (2*damage*(1-v.dmgResist)) then					
-			if v.team == me.team then
+		elseif v.visible and v.alive then					
+			if v.team == me.team and v.health > (mydamage*(1-v.dmgResist)) and v.health < (2*mydamage*(1-v.dmgResist)+1) then
 				rect[v.handle].w = 20*ex
 				rect[v.handle].h = 20*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Deny")
-			else
+			elseif v.health > (damage*(1-v.dmgResist)) and v.health < (2*damage*(1-v.dmgResist)) 
 				rect[v.handle].w = 15*ex
 				rect[v.handle].h = 15*ex
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Coin")

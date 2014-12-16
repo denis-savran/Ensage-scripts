@@ -95,6 +95,7 @@ function Load()
 end
 
 function GameClose()
+	statusText.visible = false
 	collectgarbage("collect")
 	if reg then
 		myhero = nil

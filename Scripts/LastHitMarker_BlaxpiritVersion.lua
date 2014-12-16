@@ -1,4 +1,4 @@
---<<If the icon has become colored that means that creep/building will die from your attack>>
+--<<If the icon has become colored that means that creep will die from your attack>>
 --===Modified D.L.'s script By Blaxpirit===--
 
 require("libs.Utils")
@@ -92,6 +92,13 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 			rect[v.handle] = drawMgr:CreateRect(-10*ex,-32*ex*size,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 		end
 		
+		for i = v.modifierCount, 1, -1 do
+			local modif = v.modifiers[i]
+			if modif.name == "modifier_desolator_buff" then
+				desol = 0
+			end
+		end
+
 		local resistance = (0.06*(v.armor + v.bonusArmor - desol))/(1 + 0.06*(v.armor + v.bonusArmor - desol))
 		if v.visible and v.alive and v.team ~= me.team then
 			if v.health > (2*damage*(1-resistance)+1) then

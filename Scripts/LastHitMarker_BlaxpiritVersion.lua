@@ -23,13 +23,7 @@ function Tick( tick )
 			damage = mydamage*1.12
 		end
 	end
-	
-	local desol = 0
-	local desolator = me:FindItem("item_desolator")
-	if desolator then
-		desol = 7
-	end
-	
+
 	local size = 1
 	
 	--========================<< ENTITIES >>======================================
@@ -71,18 +65,18 @@ function Tick( tick )
 	--============================================================================
 	
 	for i, v in ipairs(entities1) do
-		LastHitMarker(v,mydamage,damage,desol,size)
+		LastHitMarker(v,mydamage,damage,size)
 	end
 
 	for i, v in ipairs(entities2) do
 		mydamage = dmgtobuildings
 		damage = dmgtobuildings
 		size = 1.4
-		LastHitMarker(v,mydamage,damage,desol,size)
+		LastHitMarker(v,mydamage,damage,size)
 	end		
 end
 
-function LastHitMarker(v,mydamage,damage,desol,size)
+function LastHitMarker(v,mydamage,damage,size)
 	local OnScreen = client:ScreenPosition(v.position)	
 	if OnScreen then
 		local offset = v.healthbarOffset
@@ -91,13 +85,16 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 		if not rect[v.handle] then 
 			rect[v.handle] = drawMgr:CreateRect(-10*ex,-33*ex*size,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 		end
-			
-		local desoldebuff = v:FindModifier("modifier_desolator_buff")
-		if desoldebuff then 
-			desol = 0
-		end
 
-		local resistance = (0.06*(v.armor + v.bonusArmor - desol))/(1 + 0.06*(v.armor + v.bonusArmor - desol))
+		local resistance = v.dmgResist
+		local desolator = me:FindItem("item_desolator")
+		if desolator then
+			local desoldebuff = v:FindModifier("modifier_desolator_buff")
+			if not desoldebuff then 
+				resistance = (0.06*(v.armor + v.bonusArmor - 7))/(1 + 0.06*(v.armor + v.bonusArmor - 7))
+			end
+		end
+		
 		if v.visible and v.alive and v.team ~= me.team then
 			if v.health > (2*damage*(1-resistance)) then
 				rect[v.handle].visible = false

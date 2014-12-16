@@ -88,11 +88,9 @@ function LastHitMarker(v,mydamage,damage,size)
 
 		local resistance = v.dmgResist
 		local desolator = me:FindItem("item_desolator")
-		if desolator then
-			local desoldebuff = v:FindModifier("modifier_desolator_buff")
-			if not desoldebuff then 
-				resistance = (0.06*(v.armor + v.bonusArmor - 7))/(1 + 0.06*(v.armor + v.bonusArmor - 7))
-			end
+		local desoldebuff = v:FindModifier("modifier_desolator_buff")
+		if desolator and not desoldebuff then 
+			resistance = (0.06*(v.armor + v.bonusArmor - 7))/(1 + 0.06*(v.armor + v.bonusArmor - 7))
 		end
 		
 		if v.visible and v.alive and v.team ~= me.team then

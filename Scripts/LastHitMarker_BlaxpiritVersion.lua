@@ -91,12 +91,10 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 		if not rect[v.handle] then 
 			rect[v.handle] = drawMgr:CreateRect(-10*ex,-33*ex*size,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 		end
-		
-		for i = v.modifierCount, 1, -1 do
-			local modif = v.modifiers[i]
-			if modif.name == "modifier_desolator_buff" then
-				desol = 0
-			end
+			
+		local desoldebuff = v:FindModifier("modifier_desolator_buff")
+		if desoldebuff then 
+			desol = 0
 		end
 
 		local resistance = (0.06*(v.armor + v.bonusArmor - desol))/(1 + 0.06*(v.armor + v.bonusArmor - desol))

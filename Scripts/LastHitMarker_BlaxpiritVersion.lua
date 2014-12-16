@@ -89,7 +89,7 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 		if offset == -1 then return end			
 		
 		if not rect[v.handle] then 
-			rect[v.handle] = drawMgr:CreateRect(-10*ex,-32*ex*size,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
+			rect[v.handle] = drawMgr:CreateRect(-10*ex,-33*ex*size,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 		end
 		
 		for i = v.modifierCount, 1, -1 do
@@ -118,13 +118,13 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 			if v.health > (2*mydamage*(1-resistance)+1) then
 				rect[v.handle].visible = false
 			elseif v.health > (mydamage*(1-resistance)+1) and v.health < (2*mydamage*(1-resistance)+1) then
-				rect[v.handle].w = 20*ex*size
-				rect[v.handle].h = 20*ex*size
+				rect[v.handle].w = 17*ex*size
+				rect[v.handle].h = 17*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Deny")
 				rect[v.handle].visible = true
 			elseif v.health > 0 and v.health < (mydamage*(1-resistance)+1) then
-				rect[v.handle].w = 20*ex*size
-				rect[v.handle].h = 20*ex*size
+				rect[v.handle].w = 17*ex*size
+				rect[v.handle].h = 17*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Deny")
 				rect[v.handle].visible = true
 			end

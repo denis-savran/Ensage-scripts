@@ -9,15 +9,25 @@ local ex = client.screenSize.x/1600
 
 function Tick( tick )
 	if client.console then return end	
+	
 
 	local mydamage = me.dmgMin + me.dmgBonus
 	local damage = Damage()
 	local dmgtobuildings = 0.5*(mydamage)
+
+	local desol = 0
+	local desolator = me:FindItem("item_desolator")
+	if desolator then
+		desol = 7
+	end
+	
+	local size = 1
 	
 	--========================<< ENTITIES >>======================================
 	local entities1 = {}
 	
-	local creeps = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Lane})
+	local creeps = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep})
+	local lanecreeps = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Lane})
 	local neutrals = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Neutral})
 	
 	local venowards = entityList:GetEntities({classId=CDOTA_BaseNPC_Venomancer_PlagueWard})
@@ -26,6 +36,7 @@ function Tick( tick )
 	local golem = entityList:GetEntities({classId=CDOTA_BaseNPC_Warlock_Golem})
 	------------------------------------------------------------------------------
 	for k,v in pairs(creeps) do if v.spawned then entities1[#entities1 + 1] = v end end
+	for k,v in pairs(lanecreeps) do if v.spawned then entities1[#entities1 + 1] = v end end
 	for k,v in pairs(neutrals) do if v.spawned then entities1[#entities1 + 1] = v end end
 	
 	for k,v in pairs(venowards) do entities1[#entities1 + 1] = v end
@@ -37,60 +48,70 @@ function Tick( tick )
 	
 	local siege = entityList:GetEntities({classId=CDOTA_BaseNPC_Creep_Siege})
 	
+	local ancient = entityList:GetEntities({classId=CDOTA_BaseNPC_Fort})
 	local towers = entityList:GetEntities({classId=CDOTA_BaseNPC_Tower})
 	local barracks = entityList:GetEntities({classId=CDOTA_BaseNPC_Barracks})
 	local buildings = entityList:GetEntities({classId=CDOTA_BaseNPC_Building})
 	------------------------------------------------------------------------------
 	for k,v in pairs(siege) do if v.spawned then entities2[#entities2 + 1] = v end end
 	
+	for k,v in pairs(ancient) do entities2[#entities2 + 1] = v end
 	for k,v in pairs(towers) do entities2[#entities2 + 1] = v end
 	for k,v in pairs(barracks) do entities2[#entities2 + 1] = v end
 	for k,v in pairs(buildings) do entities2[#entities2 + 1] = v end
 	--============================================================================
 	
 	for i, v in ipairs(entities1) do
-		LastHitMarker(v,mydamage,damage)
+		LastHitMarker(v,mydamage,damage,desol,size)
 	end
 
 	for i, v in ipairs(entities2) do
 		mydamage = dmgtobuildings
 		damage = dmgtobuildings
-		LastHitMarker(v,mydamage,damage)
+		size = 1.4
+		LastHitMarker(v,mydamage,damage,desol,size)
 	end		
 end
 
-function LastHitMarker(v,mydamage,damage)
+function LastHitMarker(v,mydamage,damage,desol,size)
 	local OnScreen = client:ScreenPosition(v.position)	
 	if OnScreen then
 		local offset = v.healthbarOffset
 		if offset == -1 then return end			
-				
+		
 		if not rect[v.handle] then 
-			rect[v.handle] = drawMgr:CreateRect(-4*ex,-32*ex,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
+			rect[v.handle] = drawMgr:CreateRect(-10*ex,-32*ex*size,0,0,0xFF8AB160) rect[v.handle].entity = v rect[v.handle].entityPosition = Vector(0,0,offset) rect[v.handle].visible = false 					
 		end
-
-		if v.visible and v.alive and v.team ~= me.team then					
-			if v.health > (damage*(1-v.dmgResist)) and v.health < (2*damage*(1-v.dmgResist)) then
-				rect[v.handle].w = 15*ex
-				rect[v.handle].h = 15*ex
+		
+		local resistance = (0.06*(v.armor + v.bonusArmor - desol))/(1 + 0.06*(v.armor + v.bonusArmor - desol))
+		if v.visible and v.alive and v.team ~= me.team then
+			if v.health > (2*damage*(1-resistance)+1) then
+				rect[v.handle].visible = false
+			elseif v.health > (damage*(1-resistance)+1) and v.health < (2*damage*(1-resistance)+1) then
+				rect[v.handle].w = 15*ex*size
+				rect[v.handle].h = 15*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Coin")
-			elseif v.health > 0 and v.health < (damage*(1-v.dmgResist)+1) then
-				rect[v.handle].w = 15*ex
-				rect[v.handle].h = 15*ex
+				rect[v.handle].visible = true
+			elseif v.health > 0 and v.health < (damage*(1-resistance)+1) then
+				rect[v.handle].w = 15*ex*size
+				rect[v.handle].h = 15*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Coin")
+				rect[v.handle].visible = true
 			end
-			rect[v.handle].visible = true
 		elseif v.visible and v.alive and v.team == me.team then	
-			if v.health > (mydamage*(1-v.dmgResist)) and v.health < (2*mydamage*(1-v.dmgResist)+1) then
-				rect[v.handle].w = 20*ex
-				rect[v.handle].h = 20*ex
+			if v.health > (2*mydamage*(1-resistance)+1) then
+				rect[v.handle].visible = false
+			elseif v.health > (mydamage*(1-resistance)+1) and v.health < (2*mydamage*(1-resistance)+1) then
+				rect[v.handle].w = 20*ex*size
+				rect[v.handle].h = 20*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Deny")
-			elseif v.health > 0 and v.health < (mydamage*(1-v.dmgResist)+1) then
-				rect[v.handle].w = 20*ex
-				rect[v.handle].h = 20*ex
+				rect[v.handle].visible = true
+			elseif v.health > 0 and v.health < (mydamage*(1-resistance)+1) then
+				rect[v.handle].w = 20*ex*size
+				rect[v.handle].h = 20*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Deny")
+				rect[v.handle].visible = true
 			end
-			rect[v.handle].visible = true
 		elseif rect[v.handle].visible then
 			rect[v.handle].visible = false
 		end

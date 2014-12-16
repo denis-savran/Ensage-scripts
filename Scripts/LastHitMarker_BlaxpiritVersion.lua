@@ -12,9 +12,18 @@ function Tick( tick )
 	
 
 	local mydamage = me.dmgMin + me.dmgBonus
-	local damage = Damage()
 	local dmgtobuildings = 0.5*(mydamage)
-
+	
+	local damage = mydamage
+	local quellingblade = me:FindItem("item_quelling_blade")
+	if quellingblade then
+		if me.ATTACK_MELEE then
+			damage = mydamage*1.32
+		else
+			damage = mydamage*1.12
+		end
+	end
+	
 	local desol = 0
 	local desolator = me:FindItem("item_desolator")
 	if desolator then
@@ -116,21 +125,6 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 			rect[v.handle].visible = false
 		end
 	end	
-end
-
-function Damage()
-	local dmg =  me.dmgMin + me.dmgBonus
-	local items = me.items
-	for i,item in ipairs(items) do
-		if item and item.name == "item_quelling_blade" then
-			if me.ATTACK_MELEE then
-				return dmg*1.32
-			else
-				return dmg*1.12
-			end
-		end
-	end
-	return dmg
 end
 
 function Load()

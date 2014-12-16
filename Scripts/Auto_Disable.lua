@@ -182,6 +182,7 @@ function Load()
 end
 
 function GameClose()
+	statusText.visible = false
 	hero = {} icon = {}
 	collectgarbage("collect")
 	if reg then

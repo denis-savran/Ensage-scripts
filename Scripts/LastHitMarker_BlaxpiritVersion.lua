@@ -11,7 +11,7 @@ function Tick( tick )
 	if client.console then return end	
 	
 
-	local mydamage = me.dmgMin + me.dmgBonus
+	local mydamage = me.dmgMin + me.dmgBonus 
 	local dmgtobuildings = 0.5*(mydamage)
 	
 	local damage = mydamage
@@ -19,7 +19,7 @@ function Tick( tick )
 	if quellingblade then
 		if me.ATTACK_MELEE then
 			damage = mydamage*1.32
-		else
+		else 
 			damage = mydamage*1.12
 		end
 	end
@@ -99,28 +99,28 @@ function LastHitMarker(v,mydamage,damage,desol,size)
 
 		local resistance = (0.06*(v.armor + v.bonusArmor - desol))/(1 + 0.06*(v.armor + v.bonusArmor - desol))
 		if v.visible and v.alive and v.team ~= me.team then
-			if v.health > (2*damage*(1-resistance)+1) then
+			if v.health > (2*damage*(1-resistance)) then
 				rect[v.handle].visible = false
-			elseif v.health > (damage*(1-resistance)+1) and v.health < (2*damage*(1-resistance)+1) then
+			elseif v.health > (damage*(1-resistance)) and v.health < (2*damage*(1-resistance)) then
 				rect[v.handle].w = 15*ex*size
 				rect[v.handle].h = 15*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Coin")
 				rect[v.handle].visible = true
-			elseif v.health > 0 and v.health < (damage*(1-resistance)+1) then
+			elseif v.health > 0 and v.health < (damage*(1-resistance)) then
 				rect[v.handle].w = 15*ex*size
 				rect[v.handle].h = 15*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Coin")
 				rect[v.handle].visible = true
 			end
 		elseif v.visible and v.alive and v.team == me.team then	
-			if v.health > (2*mydamage*(1-resistance)+1) then
+			if v.health > (2*mydamage*(1-resistance)) then
 				rect[v.handle].visible = false
-			elseif v.health > (mydamage*(1-resistance)+1) and v.health < (2*mydamage*(1-resistance)+1) then
+			elseif v.health > (mydamage*(1-resistance)) and v.health < (2*mydamage*(1-resistance)) then
 				rect[v.handle].w = 17*ex*size
 				rect[v.handle].h = 17*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Passive_Deny")
 				rect[v.handle].visible = true
-			elseif v.health > 0 and v.health < (mydamage*(1-resistance)+1) then
+			elseif v.health > 0 and v.health < (mydamage*(1-resistance)) then
 				rect[v.handle].w = 17*ex*size
 				rect[v.handle].h = 17*ex*size
 				rect[v.handle].textureId = drawMgr:GetTextureId("NyanUI/other/Active_Deny")

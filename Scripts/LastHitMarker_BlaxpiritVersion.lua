@@ -1,4 +1,4 @@
---<<If the icon has become a color that mean that creep dies from your attack>>
+--<<If the icon has become colored that means that creep will die from your attack>>
 --===Modified D.L.'s script By Blaxpirit===--
 
 require("libs.Utils")

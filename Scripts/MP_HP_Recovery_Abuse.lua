@@ -170,7 +170,7 @@ end
 function PickUpItems()
 	local DroppedItems = entityList:FindEntities({type=LuaEntity.TYPE_ITEM_PHYSICAL})
 	for i,v in ipairs(DroppedItems) do
-		if GetDistance2D(me,v) <= 200 then
+		if GetDistance2D(me,v) <= 125 then
 			mp:TakeItem(v)
 		end
 	end

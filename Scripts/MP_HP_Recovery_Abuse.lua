@@ -7,12 +7,10 @@ require("libs.ScriptConfig")
 config = ScriptConfig.new()
 config:SetParameter("Hotkey", "B", config.TYPE_HOTKEY)
 config:SetParameter("DropTBorBlink", "N", config.TYPE_HOTKEY)
-config:SetParameter("Turnflag", false)
 config:Load()
 
 local toggleKey = config.Hotkey
 local droptbandblink = config.DropTBorBlink
-local turnflag = config.Turnflag
 local reg = false
 local active = false
 local activated = false
@@ -84,46 +82,46 @@ function DropItems()
 			
 			if not chanel then
 				if v.name  == "item_power_treads" and treads and ((treads.bootsState == 0 and me.health ~= me.maxHealth) or (treads.bootsState == 1 and me.mana ~= me.maxMana)) then
-					mp:DropItem(treads,me.position,turnflag)
+					mp:DropItem(treads,me.position)
 				end
 				if v.name == "item_refresher" and me.mana ~= me.maxMana then
-					mp:DropItem(v,me.position,turnflag)
+					mp:DropItem(v,me.position)
 				end
 				if v.name == "item_ancient_janggo" then
-					mp:DropItem(v,me.position,turnflag)
+					mp:DropItem(v,me.position)
 				end
 				if bonusMana or bonusIntellect or bonusAll and me.mana ~= me.maxMana then
 					if aboots and aboots.cd == 0 then
 						if v.name ~= "item_arcane_boots" then
-							mp:DropItem(v,me.position,turnflag)
+							mp:DropItem(v,me.position)
 						end
 					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
-							mp:DropItem(v,me.position,turnflag)
+							mp:DropItem(v,me.position)
 						else 
 							if v.name ~= "item_magic_wand" then
-								mp:DropItem(v,me.position,turnflag)
+								mp:DropItem(v,me.position)
 							end
 						end
 					else 
-						mp:DropItem(v,me.position,turnflag)
+						mp:DropItem(v,me.position)
 					end
 				end
 				if bonusStrength or bonusHealth or bonusAll and me.health ~= me.maxHealth then
 					if mek and mek.cd == 0 then
 						if v.name ~= "item_mekansm" then
-								mp:DropItem(v,me.position,turnflag)
+								mp:DropItem(v,me.position)
 						end 
 					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
 							mp:DropItem(v,me.position,turnflag)
 						else 
 							if v.name ~= "item_magic_wand" then
-								mp:DropItem(v,me.position,turnflag)
+								mp:DropItem(v,me.position)
 							end
 						end
 					else 
-						mp:DropItem(v,me.position,turnflag)
+						mp:DropItem(v,me.position)
 					end
 				end
 			end
@@ -161,10 +159,10 @@ function ProDrop()
 		sleepTick2 = GetTick() + 1000
 		mp:HoldPosition()
 		if tranquilboots then 
-			mp:DropItem(tranquilboots,me.position,turnflag)
+			mp:DropItem(tranquilboots,me.position)
 		end
 		if blink then
-			mp:DropItem(blink,me.position,turnflag)
+			mp:DropItem(blink,me.position)
 		end
 	end
 end
@@ -172,7 +170,7 @@ end
 function PickUpItems()
 	local DroppedItems = entityList:FindEntities({type=LuaEntity.TYPE_ITEM_PHYSICAL})
 	for i,v in ipairs(DroppedItems) do
-		mp:TakeItem(v,turnflag)
+		mp:TakeItem(v)
 	end
 	mp:Move(client.mousePosition)
 	sleepTick2 = GetTick() + 500

@@ -171,8 +171,8 @@ function PickUpItems()
 	local DroppedItems = entityList:FindEntities({type=LuaEntity.TYPE_ITEM_PHYSICAL})
 	for i,v in ipairs(DroppedItems) do
 		if GetDistance2D(me,v) <= 200 then
-		        mp:TakeItem(v)
-                end
+			mp:TakeItem(v)
+		end
 	end
 	mp:Move(client.mousePosition)
 	sleepTick2 = GetTick() + 500

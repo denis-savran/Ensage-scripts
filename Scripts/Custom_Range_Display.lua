@@ -8,7 +8,7 @@ config:SetParameter("Decrease", "J", config.TYPE_HOTKEY)
 config:Load()
 
 hotkey = config.Hotkey
-range = 400
+range = 800
 extend = config.Extend
 decrease = config.Decrease
 

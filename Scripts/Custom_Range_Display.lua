@@ -21,17 +21,7 @@ local activated = false
 local effect = nil
 
 function Key(msg,code)
-	-- check if ingame
-    if not client.connected or client.loading or client.console then
-    	return
-    end
-	
-    -- check if we already picked a hero
-    local me = entityList:GetMyHero()
-    if not me then
-    	return
-    end
-	
+	if not PlayingGame() or client.chat then return end
 	--turning on and off
 	if msg == KEY_UP and code == hotkey then
 		activated = not activated 
@@ -73,7 +63,7 @@ end
  
 function Load()
 	if PlayingGame() then
-		local me = entityList:GetMyHero()
+		me = entityList:GetMyHero()
 		if not me then 
 			script:Disable()
 		else

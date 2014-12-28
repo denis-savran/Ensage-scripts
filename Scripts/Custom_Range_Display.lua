@@ -2,13 +2,13 @@ require("libs.ScriptConfig")
 
 config = ScriptConfig.new()
 config:SetParameter("Hotkey", "B", config.TYPE_HOTKEY)
-config:SetParameter("Range", 400)
+config:SetParameter("Range", 700)
 config:SetParameter("Extend", "H", config.TYPE_HOTKEY)
 config:SetParameter("Decrease", "J", config.TYPE_HOTKEY)
 config:Load()
 
 hotkey = config.Hotkey
-range = 800
+range = config.Range
 extend = config.Extend
 decrease = config.Decrease
 

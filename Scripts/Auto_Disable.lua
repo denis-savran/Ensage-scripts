@@ -76,14 +76,17 @@ function Tick( tick )
 		local HEX = v:IsHexed()
 		local SI  = v:IsSilenced()
 		local DA  = v:IsDisarmed()
-		local invis  = me:IsInvisible()
+		local invis = me:IsInvisible()
 		local chanel = me:IsChanneling()
-		local items  = me:CanUseItems()
-		local blink  = v:FindItem("item_blink")
-		
+		local items = me:CanUseItems()
+		local blink = v:FindItem("item_blink")
+		local forcestaff = v:FindItem("item_force_staff")
+		local DP_activated = v:FindModifier("modifier_slark_dark_pact")
+		local DP_pulses = v:FindModifier("modifier_slark_dark_pact_pulses")
+	
 		if me.alive and v.alive and v.visible then
-			if items and not (IV or MI or invis or chanel) then
-				if blink and blink.cd > 11 then
+			if items and not (IV or MI or invis or chanel or DP_activated or DP_pulses) then
+				if (blink and blink.cd > 11) or (forcestaff and forcestaff.cd > 18.6) then
 					UseMedalliontarget()
 					UseRodtarget()
 				elseif active then
@@ -103,8 +106,8 @@ function Tick( tick )
 		end
 
 		if me.alive and v.alive and v.visible and not hero[i] then
-			if items and not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel) then
-				if blink and blink.cd > 11 then
+			if items and not (IV or MI or LS or ST or HEX or SI or DA or invis or chanel or DP_activated or DP_pulses) then
+				if (blink and blink.cd > 11) or (forcestaff and forcestaff.cd > 18.6) then
 					UseHex()
 					UseSheepStickTarget()
 					UseImmediateStun()
@@ -199,11 +202,11 @@ script:RegisterEvent(EVENT_TICK,Load)
 --functions for item or skill usage------------------------------------------------------------
     
 function UseEulScepterTarget()
-	local euls = me:FindItem("item_cyclone")
+	local disable = me:FindItem("item_cyclone")
 	if activated == 0 then
-		if euls and euls.cd == 0 then
-			if target and GetDistance2D(me,target) < 700 then
-				me:CastAbility(euls,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -213,11 +216,11 @@ function UseEulScepterTarget()
 end
    
 function UseSheepStickTarget()
-	local sheep = me:FindItem("item_sheepstick")
+	local disable = me:FindItem("item_sheepstick")
 	if activated == 0 then
-		if sheep and sheep.cd == 0 then
-			if target and GetDistance2D(me,target) < 800 then
-				me:CastAbility(sheep,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -227,11 +230,11 @@ function UseSheepStickTarget()
 end
     
 function UseOrchidtarget()
-	local orchid = me:FindItem("item_orchid")
+	local disable = me:FindItem("item_orchid")
 	if activated == 0 then
-		if orchid and orchid.cd == 0 then
-			if target and GetDistance2D(me,target) < 900 then
-				me:CastAbility(orchid,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -241,11 +244,11 @@ function UseOrchidtarget()
 end
     
 function UseAbyssaltarget()
-	local abyssal_blade = me:FindItem("item_abyssal_blade")
+	local disable = me:FindItem("item_abyssal_blade")
 	if activated == 0 then
-		if abyssal_blade and abyssal_blade.cd == 0 then
-			if target and GetDistance2D(me,target) < 140 then
-				me:CastAbility(abyssal_blade,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				activated = 1 
 				sleepTick = GetTick() + 100
 				return
@@ -255,11 +258,11 @@ function UseAbyssaltarget()
 end
 	
 function UseHalberdtarget()
-	local heavens_halberd = me:FindItem("item_heavens_halberd")
+	local disable = me:FindItem("item_heavens_halberd")
 	if activated == 0 then
-		if heavens_halberd and heavens_halberd.cd == 0 then
-			if target and GetDistance2D(me,target) < 600 then
-				me:CastAbility(heavens_halberd,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -269,11 +272,11 @@ function UseHalberdtarget()
 end
 	
 function UseEtherealtarget()
-	local ethereal_blade = me:FindItem("item_ethereal_blade")
+	local disable = me:FindItem("item_ethereal_blade")
 	if activated == 0 then
-		if ethereal_blade and ethereal_blade.cd == 0 then
-			if target and GetDistance2D(me,target) < 800 then
-				me:CastAbility(ethereal_blade,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -283,10 +286,10 @@ function UseEtherealtarget()
 end
 
 function UseRodtarget()
-	local rod_of_atos = me:FindItem("item_rod_of_atos")
-	if rod_of_atos and rod_of_atos.cd == 0 then
-		if target and GetDistance2D(me,target) < 1200 then
-			me:CastAbility(rod_of_atos,target)
+	local disable = me:FindItem("item_rod_of_atos")
+	if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if target and GetDistance2D(me,target) < disable.castRange then
+			me:CastAbility(disable,target)
 			sleepTick = GetTick() + 100
 			return
 		end
@@ -294,11 +297,11 @@ function UseRodtarget()
 end
 
 function UseMedalliontarget()
-	local medallion = me:FindItem("item_medallion_of_courage")
+	local disable = me:FindItem("item_medallion_of_courage")
 	if me.health/me.maxHealth > 0.1 then
-		if medallion and medallion.cd == 0 then
-			if target and GetDistance2D(me,target) < 1000 then
-				me:CastAbility(medallion,target)
+		if disable and disable.cd == 0 and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:CastAbility(disable,target)
 				sleepTick = GetTick() + 100
 				return
 			end
@@ -311,13 +314,13 @@ function UseHex()
 		local hex_lion  = me:FindSpell("lion_voodoo")
 		local hex_rasta = me:FindSpell("shadow_shaman_voodoo")
 		if hex_lion then
-			hex = hex_lion
+			local disable = hex_lion
 		elseif hex_rasta then
-			hex = hex_rasta
+			local disable = hex_rasta
 		end
-		if hex and hex.level > 0 and hex:CanBeCasted() and me:CanCast() then
-			if target and GetDistance2D(me,target) < 500 then
-				me:SafeCastAbility(hex,target)
+		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:SafeCastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -331,13 +334,13 @@ function UseAstral()
 		local astral_od = me:FindSpell("obsidian_destroyer_astral_imprisonment")
 		local astral_sd = me:FindSpell("shadow_demon_disruption")
 		if alstral_destr then
-			local alstral = alstral_destr
+			local disable = alstral_destr
 		elseif astral_sd then
-			local astral = astral_sd
+			local disable = astral_sd
 		end
-		if astral and astral.level > 0 and astral:CanBeCasted() and me:CanCast() then
-			if target and GetDistance2D(me,target) < astral.castRange  then
-				me:SafeCastAbility(astral,target)
+		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange  then
+				me:SafeCastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -351,13 +354,13 @@ function UseImmediateStun()
 		local tlknz = me:FindSpell("rubick_telekinesis")
 		local dtail = me:FindSpell("dragon_knight_dragon_tail")
 		if tlknz then
-			local stun = tlknz
+			local disable = tlknz
 		elseif dtail then
-			local stun = dtail
+			local disable = dtail
 		end
-		if stun and stun.level > 0 and stun:CanBeCasted() and me:CanCast() then
-			if target and GetDistance2D(me,target) < stun.castRange then
-				me:SafeCastAbility(stun,target)
+		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:SafeCastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -368,10 +371,10 @@ end
 
 function UseSkysSeal()
 	if activated == 0 then
-		local silence = me:FindSpell("skywrath_mage_ancient_seal")
-		if silence and silence.level > 0 and silence:CanBeCasted() and me:CanCast() then
-			if target and GetDistance2D(me,target) < silence.castRange then
-				me:SafeCastAbility(silence,target)
+		local disable = me:FindSpell("skywrath_mage_ancient_seal")
+		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
+			if target and GetDistance2D(me,target) < disable.castRange then
+				me:SafeCastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -382,10 +385,10 @@ end
 
 function UsePucksRift()
 	if activated == 0 then
-		local silence = me:FindSpell("puck_waning_rift")
-		if silence and silence.level > 0 and silence:CanBeCasted() and me:CanCast() then
+		local disable = me:FindSpell("puck_waning_rift")
+		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < 400 then
-				me:SafeCastAbility(silence)
+				me:SafeCastAbility(disable)
 				activated = 1
 				sleepTick = GetTick() + 100
 				return
@@ -398,10 +401,10 @@ function UseHeroSpell()
 	if activated == 0 then
 		if DisableSpell[me.name] then
 			if me:FindSpell(DisableSpell[me.name].Spell) and me:FindSpell(DisableSpell[me.name].Spell).level > 0 then
-				local dSpell = me:FindSpell(DisableSpell[me.name].Spell)
-				if dSpell and dSpell.level > 0 and dSpell:CanBeCasted() and me:CanCast() then
-					if target and GetDistance2D(me,target) < dSpell.castRange then
-						me:SafeCastAbility(dSpell,target)
+				local disable = me:FindSpell(DisableSpell[me.name].Spell)
+				if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
+					if target and GetDistance2D(me,target) < disable.castRange then
+						me:SafeCastAbility(disable,target)
 						activated = 1
 						sleepTick = GetTick() + 100
 						return

@@ -311,12 +311,13 @@ end
 
 function UseHex()
 	if activated == 0 then
+		local disable = nil
 		local hex_lion  = me:FindSpell("lion_voodoo")
 		local hex_rasta = me:FindSpell("shadow_shaman_voodoo")
 		if hex_lion then
-			local disable = hex_lion
+			disable = hex_lion
 		elseif hex_rasta then
-			local disable = hex_rasta
+			disable = hex_rasta
 		end
 		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
@@ -331,12 +332,13 @@ end
 
 function UseAstral()
 	if activated == 0 then
+		local disable = nil
 		local astral_od = me:FindSpell("obsidian_destroyer_astral_imprisonment")
 		local astral_sd = me:FindSpell("shadow_demon_disruption")
 		if alstral_destr then
-			local disable = alstral_destr
+			disable = alstral_destr
 		elseif astral_sd then
-			local disable = astral_sd
+			disable = astral_sd
 		end
 		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange  then
@@ -351,12 +353,13 @@ end
 
 function UseImmediateStun()
 	if activated == 0 then
+		local disable = nil
 		local tlknz = me:FindSpell("rubick_telekinesis")
 		local dtail = me:FindSpell("dragon_knight_dragon_tail")
 		if tlknz then
-			local disable = tlknz
+			disable = tlknz
 		elseif dtail then
-			local disable = dtail
+			disable = dtail
 		end
 		if disable and disable.level > 0 and me:CanCast() and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then

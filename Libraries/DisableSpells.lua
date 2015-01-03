@@ -39,8 +39,8 @@ Spell = "death_prophet_silence"},
 npc_dota_hero_night_stalker = {
 Spell = "night_stalker_crippling_fear"},
 
-npc_dota_hero_batrider = {
-Spell = "batrider_flaming_lasso"},
+--[[npc_dota_hero_batrider = {
+Spell = "batrider_flaming_lasso"},]]
 
 npc_dota_hero_doom_bringer = {
 Spell = "doom_bringer_doom"},

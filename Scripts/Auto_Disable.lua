@@ -197,7 +197,7 @@ script:RegisterEvent(EVENT_TICK,Load)
 function UseEulScepterTarget(target)
 	local disable = me:FindItem("item_cyclone")
 	if activated == 0 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				activated = 1
@@ -211,7 +211,7 @@ end
 function UseSheepStickTarget(target)
 	local disable = me:FindItem("item_sheepstick")
 	if activated == 0 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				activated = 1
@@ -225,7 +225,7 @@ end
 function UseOrchidtarget(target)
 	local disable = me:FindItem("item_orchid")
 	if activated == 0 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				activated = 1
@@ -239,7 +239,7 @@ end
 function UseAbyssaltarget(target)
 	local disable = me:FindItem("item_abyssal_blade")
 	if activated == 0 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				activated = 1 
@@ -253,7 +253,7 @@ end
 function UseHalberdtarget(target)
 	local disable = me:FindItem("item_heavens_halberd")
 	if activated == 0 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				activated = 1
@@ -267,7 +267,7 @@ end
 function UseEtherealtarget(target)
 	local disable = me:FindItem("item_ethereal_blade")
 	if activated == 0 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				activated = 1
@@ -280,7 +280,7 @@ end
 
 function UseRodtarget(target)
 	local disable = me:FindItem("item_rod_of_atos")
-	if disable and disable.cd == 0 and disable:CanBeCasted() then
+	if disable and disable:CanBeCasted() then
 		if target and GetDistance2D(me,target) < disable.castRange then
 			me:CastAbility(disable,target)
 			sleepTick = GetTick() + 100
@@ -292,7 +292,7 @@ end
 function UseMedalliontarget(target)
 	local disable = me:FindItem("item_medallion_of_courage")
 	if me.health/me.maxHealth > 0.1 then
-		if disable and disable.cd == 0 and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
 				sleepTick = GetTick() + 100
@@ -312,7 +312,7 @@ function UseHex(target)
 		elseif hex_rasta then
 			disable = hex_rasta
 		end
-		if disable and disable.level ~= 0 and me:CanCast() and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:SafeCastAbility(disable,target)
 				activated = 1
@@ -333,7 +333,7 @@ function UseAstral(target)
 		elseif astral_sd then
 			disable = astral_sd
 		end
-		if disable and disable.level ~= 0 and me:CanCast() and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < disable.castRange  then
 				me:SafeCastAbility(disable,target)
 				activated = 1
@@ -354,7 +354,7 @@ function UseImmediateStun(target)
 		elseif dtail then
 			disable = dtail
 		end
-		if disable and disable.level ~= 0 and me:CanCast() and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:SafeCastAbility(disable,target)
 				activated = 1
@@ -368,7 +368,7 @@ end
 function UseSkysSeal(target)
 	if activated == 0 then
 		local disable = me:FindSpell("skywrath_mage_ancient_seal")
-		if disable and disable.level ~= 0 and me:CanCast() and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:SafeCastAbility(disable,target)
 				activated = 1
@@ -382,7 +382,7 @@ end
 function UsePucksRift(target)
 	if activated == 0 then
 		local disable = me:FindSpell("puck_waning_rift")
-		if disable and disable.level ~= 0 and me:CanCast() and disable:CanBeCasted() then
+		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < 400 then
 				me:SafeCastAbility(disable)
 				activated = 1
@@ -397,7 +397,7 @@ function UseHeroSpell(target)
 	if activated == 0 then
 		if DisableSpell[me.name] then
 			local disable = me:FindSpell(DisableSpell[me.name].Spell)
-			if disable and disable.level ~= 0 and me:CanCast() and disable:CanBeCasted() then
+			if disable and disable:CanBeCasted() and me:CanCast() then
 				if target and GetDistance2D(me,target) < disable.castRange then
 					me:SafeCastAbility(disable,target)
 					activated = 1

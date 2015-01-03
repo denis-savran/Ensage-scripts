@@ -108,6 +108,7 @@ function Tick( tick )
 					UseSheepStickTarget(v)
 					UseImmediateStun(v)
 					UseAbyssaltarget(v)
+					UseBatriderLasso(v)
 					UseOrchidtarget(v)
 					UseSkysSeal(v)
 					UsePucksRift(v)
@@ -121,6 +122,7 @@ function Tick( tick )
 					UseSheepStickTarget(v)
 					UseImmediateStun(v)
 					UseAbyssaltarget(v)
+					UseBatriderLasso(v)
 					UseOrchidtarget(v)
 					UseSkysSeal(v)
 					UsePucksRift(v)
@@ -133,6 +135,7 @@ function Tick( tick )
 						UseSheepStickTarget(v)
 						UseImmediateStun(v)
 						UseAbyssaltarget(v)
+						UseBatriderLasso(v)
 						UseOrchidtarget(v)
 						UseSkysSeal(v)
 						UsePucksRift(v)
@@ -356,6 +359,20 @@ function UseImmediateStun(target)
 		end
 		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < disable.castRange then
+				me:SafeCastAbility(disable,target)
+				activated = 1
+				sleepTick = GetTick() + 100
+				return
+			end
+		end
+	end
+end
+
+function UseBatriderLasso(target)
+	if activated == 0 then
+		local disable = me:FindSpell("batrider_flaming_lasso")
+		if disable and disable:CanBeCasted() and me:CanCast() then
+			if target and GetDistance2D(me,target) < 150 then
 				me:SafeCastAbility(disable,target)
 				activated = 1
 				sleepTick = GetTick() + 100

@@ -195,8 +195,8 @@ script:RegisterEvent(EVENT_TICK,Load)
 --functions for item or skill usage------------------------------------------------------------
     
 function UseEulScepterTarget(target)
-	local disable = me:FindItem("item_cyclone")
 	if activated == 0 then
+		local disable = me:FindItem("item_cyclone")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
@@ -209,8 +209,8 @@ function UseEulScepterTarget(target)
 end
    
 function UseSheepStickTarget(target)
-	local disable = me:FindItem("item_sheepstick")
 	if activated == 0 then
+		local disable = me:FindItem("item_sheepstick")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
@@ -223,8 +223,8 @@ function UseSheepStickTarget(target)
 end
     
 function UseOrchidtarget(target)
-	local disable = me:FindItem("item_orchid")
 	if activated == 0 then
+		local disable = me:FindItem("item_orchid")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
@@ -237,8 +237,8 @@ function UseOrchidtarget(target)
 end
     
 function UseAbyssaltarget(target)
-	local disable = me:FindItem("item_abyssal_blade")
 	if activated == 0 then
+		local disable = me:FindItem("item_abyssal_blade")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
@@ -251,8 +251,8 @@ function UseAbyssaltarget(target)
 end
 	
 function UseHalberdtarget(target)
-	local disable = me:FindItem("item_heavens_halberd")
 	if activated == 0 then
+		local disable = me:FindItem("item_heavens_halberd")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
@@ -265,8 +265,8 @@ function UseHalberdtarget(target)
 end
 	
 function UseEtherealtarget(target)
-	local disable = me:FindItem("item_ethereal_blade")
 	if activated == 0 then
+		local disable = me:FindItem("item_ethereal_blade")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)
@@ -279,8 +279,8 @@ function UseEtherealtarget(target)
 end
 
 function UseRodtarget(target)
-	local disable = me:FindItem("item_rod_of_atos")
 	if disable and disable:CanBeCasted() then
+		local disable = me:FindItem("item_rod_of_atos")
 		if target and GetDistance2D(me,target) < disable.castRange then
 			me:CastAbility(disable,target)
 			sleepTick = GetTick() + 100
@@ -290,8 +290,8 @@ function UseRodtarget(target)
 end
 
 function UseMedalliontarget(target)
-	local disable = me:FindItem("item_medallion_of_courage")
 	if me.health/me.maxHealth > 0.1 then
+		local disable = me:FindItem("item_medallion_of_courage")
 		if disable and disable:CanBeCasted() then
 			if target and GetDistance2D(me,target) < disable.castRange then
 				me:CastAbility(disable,target)

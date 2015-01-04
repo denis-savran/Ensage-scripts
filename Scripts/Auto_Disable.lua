@@ -282,8 +282,8 @@ function UseEtherealtarget(target)
 end
 
 function UseRodtarget(target)
-	if disable and disable:CanBeCasted() then
-		local disable = me:FindItem("item_rod_of_atos")
+	local disable = me:FindItem("item_rod_of_atos")
+	if disable and disable:CanBeCasted() then	
 		if target and GetDistance2D(me,target) < disable.castRange then
 			me:CastAbility(disable,target)
 			sleepTick = GetTick() + 100

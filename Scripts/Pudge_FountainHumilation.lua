@@ -3,6 +3,7 @@
 
 require("libs.Utils")
 require("libs.ScriptConfig")
+require("libs.SideMessage")
 
 local config = ScriptConfig.new()
 config:SetParameter("Key", "T", config.TYPE_HOTKEY)
@@ -15,7 +16,8 @@ local auto = config.Auto
 local reg = false
 local active = false
 local x_ratio = client.screenSize.x/1600 
-local F11 = drawMgr:CreateFont("F11","Tahoma",11*x_ratio,550*x_ratio) 
+local F11 = drawMgr:CreateFont("F11","Tahoma",11*x_ratio,550*x_ratio)
+local F15 = drawMgr:CreateFont("F15","Tahoma",15*x_ratio,550*x_ratio)
 local statusText = drawMgr:CreateText(3*x_ratio,107*x_ratio,-1,"(" .. string.char(toggleKey) .. ") Pudge's humiliation: off",F11) statusText.visible = false
 
 local add_effects = true
@@ -64,12 +66,19 @@ function Tick( tick )
 		add_effects = false
 	end
 	
+	local wisp = entityList:GetEntities({classId=CDOTA_Unit_Hero_Wisp,team=me.team})[1]
+	
 	if active or auto then
-		local hook = me:GetAbility(1)
-		if me.alive and not me:IsChanneling() and hook:CanBeCasted() and GetDistance2D(me,wait_position) < 300 then
-			local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team})
-			table.sort( enemies, function (a,b) return a.respawnTime < b.respawnTime end )
-			for i,v in ipairs(enemies) do
+		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,team = 5-me.team,alive=false})
+		table.sort( enemies, function (a,b) return a.respawnTime < b.respawnTime end )
+		for i,v in ipairs(enemies) do
+			if v.respawnTime <= 15 and v.respawnTime > 14.9 and wisp and SleepCheck("message") then
+				GenerateSideMessage(me.name,"  Get ready for Humilation!")
+				Sleep(1000,"message")
+			end
+			
+			local hook = me:GetAbility(1)
+			if me.alive and not me:IsChanneling() and hook:CanBeCasted() and GetDistance2D(me,wait_position) < 300 then
 				if v.respawnTime <= 9 and v.respawnTime > 2 and not isPosEqual(me.position,wait_position,10) and SleepCheck("move") then
 					mp:Move(wait_position)
 					Sleep(1000,"move")
@@ -91,6 +100,12 @@ end
 
 function isPosEqual(v1, v2, d)
 	return (v1-v2).length <= d
+end
+
+function GenerateSideMessage(heroname,msg)
+	local sidemsg = sideMessage:CreateMessage(300*x_ratio,60*x_ratio,0x111111C0,0x444444FF,200,1500)
+	sidemsg:AddElement(drawMgr:CreateRect(10*x_ratio,10*x_ratio,72*x_ratio,40*x_ratio,0xFFFFFFFF,drawMgr:GetTextureId("NyanUI/heroes_horizontal/"..heroname:gsub("npc_dota_hero_",""))))
+	sidemsg:AddElement(drawMgr:CreateText(85*x_ratio,20*x_ratio,-1,"" .. msg,F15))
 end
  
 function Load()

@@ -123,6 +123,7 @@ function Tick( tick )
 					UseImmediateStun(v)
 					UseAbyssaltarget(v)
 					UseBatriderLasso(v)
+					UseLegionDuel(v)
 					UseOrchidtarget(v)
 					UseSkysSeal(v)
 					UsePucksRift(v)
@@ -371,6 +372,20 @@ end
 function UseBatriderLasso(target)
 	if activated == 0 then
 		local disable = me:FindSpell("batrider_flaming_lasso")
+		if disable and disable:CanBeCasted() and me:CanCast() then
+			if target and GetDistance2D(me,target) < 150 then
+				me:SafeCastAbility(disable,target)
+				activated = 1
+				sleepTick = GetTick() + 100
+				return
+			end
+		end
+	end
+end
+
+function UseLegionDuel(target)
+	if activated == 0 then
+		local disable = me:FindSpell("legion_commander_duel")
 		if disable and disable:CanBeCasted() and me:CanCast() then
 			if target and GetDistance2D(me,target) < 150 then
 				me:SafeCastAbility(disable,target)

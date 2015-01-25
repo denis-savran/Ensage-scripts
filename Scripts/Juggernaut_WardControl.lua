@@ -1,8 +1,8 @@
 --<<Advanced healing ward contol>>
 --===By Blaxpirit===--
 
-require("libs.ScriptConfig")
 require("libs.Utils")
+require("libs.ScriptConfig")
 
 local config = ScriptConfig.new()
 config:SetParameter("MoveWard", "G", config.TYPE_HOTKEY)

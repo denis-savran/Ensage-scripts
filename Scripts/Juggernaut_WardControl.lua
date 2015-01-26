@@ -30,7 +30,7 @@ function Key(msg,code)
 			if allied_hero then 
 				ward:Follow(allied_hero)
 			else
-				ward:Move(client.mousePosition)
+				ward:Move(cursor)
 			end
 			active = false
 		end

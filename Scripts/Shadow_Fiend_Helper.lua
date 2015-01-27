@@ -114,7 +114,6 @@ function Tick(tick)
 			local eulmodif = target:FindModifier("modifier_eul_cyclone")
 			if eul and eul:CanBeCasted() and not eulmodif then
 				me:CastAbility(eul,target)
-				--disableAutoAttack = true
 				Sleep(2500,"auto_attack")
 				Sleep(100)
 				return

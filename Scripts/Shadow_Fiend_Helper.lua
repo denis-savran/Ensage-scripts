@@ -53,6 +53,7 @@ function Key(msg,code)
 	if code == HideKey and statusText.visible == true then
 	    statusText.visible = false
 	    statusText2.visible = false
+	    statusText3.visible = false
 	    statusText4.visible = false
 	end
 end

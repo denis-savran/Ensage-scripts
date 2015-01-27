@@ -1,5 +1,6 @@
 --<<ShadowFiend Combo and Raze helper>>
 --===By Blaxpirit and Nova===--
+--Auto coil prediction by D.L.
 
 require("libs.Utils")
 require("libs.ScriptConfig")

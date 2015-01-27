@@ -17,6 +17,7 @@ local droptranquils = config.DropTranquils
 local reg = false
 local active = false
 local activated = false
+local disableAutoAttack = false
 
 local sleepTick = nil
 local sleepTick2 = nil
@@ -52,22 +53,24 @@ function Tick( tick )
 	if not PlayingGame() then return end	
 	if not me then return end
 	
-	if sleepTick and sleepTick > tick then
+	if not SleepCheck() then
 		active = false 
 	else
 		active = true
 	end
 	
-	if sleepTick2 and sleepTick2 > tick then
+	if not SleepCheck("auto_attack") and disableAutoAttack then
 		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 0")
-	else
+		disableAutoAttack = false
+	elseif SleepCheck("auto_attack") and not disableAutoAttack then
 		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 1")
+		disableAutoAttack = true
 	end
 end	
 	
 function DropItems()
 	if me.alive and (me.mana ~= me.maxMana or me.health ~= me.maxHealth) then
-		sleepTick2 = GetTick() + 3250
+		Sleep(3250,"auto_attack")
 		mp:HoldPosition()
 		local aboots = me:FindItem("item_arcane_boots")
 		local soulring = me:FindItem("item_soul_ring")
@@ -140,22 +143,22 @@ function DropItems()
 		if cuseitems and not (invis and chanel) then
 			if aboots and aboots.cd == 0 and me.mana ~= me.maxMana and aboots:CanBeCasted() then
 				me:SafeCastItem("item_arcane_boots")
-				sleepTick = GetTick() + 1000
+				Sleep(1000)
 			elseif mek and mek.cd == 0 and me.health ~= me.maxHealth and mek:CanBeCasted() then
 				me:SafeCastItem("item_mekansm")
-				sleepTick = GetTick() + 1000
+				Sleep(1000)
 			elseif soulring and soulring.cd == 0 and me.mana ~= me.maxMana then
 				me:SafeCastItem("item_soul_ring")
-				sleepTick = GetTick() + 0
+				Sleep(50)
 			elseif bottle and bottle.charges > 0 and bottle.cd == 0 and not me:FindModifier("modifier_bottle_regeneration") then
 				me:SafeCastItem("item_bottle")
-				sleepTick = GetTick() + 3000
+				Sleep(3000)
 			elseif lowstick and lowstick.charges > 0 and lowstick.cd == 0 then
 				me:SafeCastItem("item_magic_stick")
-				sleepTick = GetTick() + 0
+				Sleep(50)
 			elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 				me:SafeCastItem("item_magic_wand")
-				sleepTick = GetTick() + 1000
+				Sleep(1000)
 			end
 		end
 	end	
@@ -165,7 +168,7 @@ function DropBlink()
 	local blink  = me:FindItem("item_blink")
 	local chanel = me:IsChanneling()
 	if me.alive and not chanel then
-		sleepTick2 = GetTick() + 1000
+		Sleep(1000,"auto_attack")
 		mp:HoldPosition()
 		if blink then
 			mp:DropItem(blink,me.position)
@@ -193,7 +196,7 @@ function PickUpItems()
 		end
 	end
 	mp:Move(client.mousePosition)
-	sleepTick2 = GetTick() + 500
+	Sleep(500,"auto_attack")
 end
 
 function PickUpTranquils()

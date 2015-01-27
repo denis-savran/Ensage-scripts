@@ -1,5 +1,5 @@
 --<<ShadowFiend Combo and Raze helper>>
---===By Blaxpirit===--
+--===By Blaxpirit and Nova===--
 
 require("libs.Utils")
 require("libs.ScriptConfig")
@@ -33,12 +33,11 @@ local statusText = drawMgr:CreateText(x*monitor,y*monitor,0xC92828FF,"ShadowFien
 local statusText2 = drawMgr:CreateText((x)*monitor,(y+17)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(Hotkey).."'' for Ult Combo",F15) statusText2.visible = false
 local statusText3 = drawMgr:CreateText((x)*monitor,(y+32)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(RazeKey).."'' for Auto Raze",F15) statusText3.visible = false
 local statusText4 = drawMgr:CreateText((x)*monitor,(y+47)*monitor,0xFFFFFFFFF,"Press:  ''"..string.char(HideKey).."'' to hide this message for the rest of the game.",F15) statusText4.visible = false
---local statusText5 = drawMgr:CreateText((x+90)*monitor,(y+62)*monitor,0xFFFFFFFFF,"",F15) statusText4.visible = false
 
 --=====================<< SkillBuilds >>=======================
 --1 - raze, 4 - necromastery, 5 - presence of a dark lord, 6 - ult, 7 - attribute bonus
 local sb1 = {4,1,1,4,1,4,1,4,6,5,6,5,5,5,7,6,7,7,7,7,7,7,7,7,7}
-local sb2 = {4,5,4,5,4,5,4,5,6,7,6,7,7,7,7,6,7,7,7,7,7,1,1,1,1}
+local sb2 = {4,5,4,5,4,5,4,5,6,7,6,7,7,7,7,6,7,7,7,7,7,1,1,1,1} -- no coils build 
 --=========================<< END >>===========================
 
 function Key(msg,code)
@@ -105,7 +104,7 @@ function Tick(tick)
 			local eulmodif = target:FindModifier("modifier_eul_cyclone")
 			if eul and eul:CanBeCasted() and not eulmodif then
 				me:CastAbility(eul,target)
-				Sleep(250)
+				Sleep(100)
 				return
 			end
 			if eulmodif then
@@ -119,7 +118,7 @@ function Tick(tick)
 				end
 				if ult and ult:CanBeCasted() and (eulmodif.remainingTime < 1.70) and GetDistance2D(me,target) <= 50 then
 					me:CastAbility(ult)
-					Sleep(250)
+					Sleep(100)
 					return
 				end
 			end
@@ -128,65 +127,17 @@ function Tick(tick)
 	
 	--Smart razes
 	if not client.chat and sel and sel.name == "npc_dota_hero_nevermore" and SleepCheck("razes") then
-		local cursor = client.mousePosition
-		local distance = GetDistance2D(me,cursor)
-		statusText5.text = ""..me:FindRelativeAngle(cursor)
 		--[[ Q hotkey - Shadowraze(near) ]]
 		if IsKeyDown(81) then
-			local raze = me:GetAbility(1)
-			if raze:CanBeCasted() then
-				--if distance <= 450 and distance >= 0 then
-					if me:FindRelativeAngle(cursor) >= 0.1 or me:FindRelativeAngle(cursor) <= -0.1 then
-						mp:Move((cursor - me.position) * 50 / GetDistance2D(cursor,me) + me.position)
-					end
-					if me:FindRelativeAngle(cursor) <= 0.1 and me:FindRelativeAngle(cursor) >= -0.1 then
-						me:CastAbility(raze)
-					end
-					Sleep(250,"razes")
-				--[[else
-					mp:Move((cursor - me.position) * (GetDistance2D(me,cursor) - 425) / GetDistance2D(cursor,me) + me.position)
-					me:CastAbility(raze,true)
-					Sleep(200,"razes")
-				end]]
-			end
+			CastSmartRaze(1,me,mp)
 		end
 		--[[ W hotkey - Shadowraze(medium) ]]
 		if IsKeyDown(87) then
-			local raze = me:GetAbility(2)
-			if raze:CanBeCasted() then
-				--if distance <= 700 and distance >= 200 then
-					if me:FindRelativeAngle(cursor) >= 0.1 or me:FindRelativeAngle(cursor) <= -0.1 then
-						mp:Move((cursor - me.position) * 50 / GetDistance2D(cursor,me) + me.position)
-					end
-					if me:FindRelativeAngle(cursor) <= 0.1 and me:FindRelativeAngle(cursor) >= -0.1 then
-						me:CastAbility(raze)
-					end
-					Sleep(250,"razes")
-				--[[else
-					mp:Move((cursor - me.position) * (GetDistance2D(me,cursor) - 675) / GetDistance2D(cursor,me) + me.position)
-					me:CastAbility(raze,true)
-					Sleep(200,"razes")
-				end]]
-			end
+			CastSmartRaze(2,me,mp)
 		end
 		--[[ E hotkey - Shadowraze(far) ]]
 		if IsKeyDown(69) then
-			local raze = me:GetAbility(3)
-			if raze:CanBeCasted() then
-				--if distance <= 950 and distance >= 450 then
-					if me:FindRelativeAngle(cursor) >= 0.15 or me:FindRelativeAngle(cursor) <= -0.15 then
-						mp:Move((cursor - me.position) * 50 / GetDistance2D(cursor,me) + me.position)
-					end
-					if me:FindRelativeAngle(cursor) < 0.15 and me:FindRelativeAngle(cursor) > -0.15 then
-						me:CastAbility(raze)
-					end
-					Sleep(250,"razes")
-				--[[else
-					mp:Move((cursor - me.position) * (GetDistance2D(me,cursor) - 925) / GetDistance2D(cursor,me) + me.position)
-					me:CastAbility(raze,true)
-					Sleep(200,"razes")
-				end]]
-			end
+			CastSmartRaze(3,me,mp)
 		end
 	end
 	
@@ -215,6 +166,20 @@ function CastAutoRaze(number,target,me)
 		me:Attack(target)
 		me:CastAbility(raze)
 		Sleep(200)
+	end
+end
+
+function CastSmartRaze(number,me,mp)
+	local raze = me:GetAbility(number)
+	local cursor = client.mousePosition
+	if raze:CanBeCasted() then
+		if me:FindRelativeAngle(cursor) >= 0.1 or me:FindRelativeAngle(cursor) <= -0.1 then
+			mp:Move((cursor - me.position) * 50 / GetDistance2D(cursor,me) + me.position)
+		end
+		if me:FindRelativeAngle(cursor) <= 0.1 and me:FindRelativeAngle(cursor) >= -0.1 then
+			me:CastAbility(raze)
+		end
+		Sleep(250,"razes")
 	end
 end
 
@@ -247,7 +212,6 @@ function Load()
 			statusText2.visible = true
 			statusText3.visible = true
 			statusText4.visible = true
-			--statusText5.visible = true
 			script:RegisterEvent(EVENT_TICK,Tick)
 			script:RegisterEvent(EVENT_KEY,Key)
 			script:UnregisterEvent(Load)
@@ -262,7 +226,6 @@ function GameClose()
 		statusText2.visible = false
 		statusText3.visible = false
 		statusText4.visible = false
-		--statusText5.visible = false
 		script:UnregisterEvent(Main)
 		script:UnregisterEvent(Key)
 		play = false

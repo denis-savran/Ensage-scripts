@@ -1,5 +1,5 @@
 --<<ShadowFiend Combo and Raze helper>>
---===By Blaxpirit===--
+--===By Blaxpirit and Nova===--
 
 require("libs.Utils")
 require("libs.ScriptConfig")

@@ -1,5 +1,5 @@
 --<<ShadowFiend Combo and Raze helper>>
---===By Blaxpirit and Nova===--
+--===By Blaxpirit===--
 
 require("libs.Utils")
 require("libs.ScriptConfig")
@@ -58,6 +58,12 @@ end
 function Tick(tick)
 	if not SleepCheck() then return end
 	
+	if not SleepCheck("auto_attack") then
+		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 0")
+	else
+		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 1")
+	end
+	
 	local me = entityList:GetMyHero()
 	local mp = entityList:GetMyPlayer()
 	
@@ -104,15 +110,17 @@ function Tick(tick)
 			local eulmodif = target:FindModifier("modifier_eul_cyclone")
 			if eul and eul:CanBeCasted() and not eulmodif then
 				me:CastAbility(eul,target)
+				Sleep(2500,"auto_attack")
 				Sleep(100)
 				return
 			end
 			if eulmodif then
-				if GetDistance2D(me,target)/me.movespeed < 0.8 and SleepCheck("move") then
+				if GetDistance2D(me,target)/me.movespeed < 0.8 and SleepCheck("move") and SleepCheck("blink") then
 					mp:Move(target.position)
 					Sleep(2000,"move")
 				elseif blink and blink:CanBeCasted() and (eulmodif.remainingTime < 1.80) and SleepCheck("move") then
 					me:CastAbility(blink,target.position)
+					Sleep(2000,"blink")
 					Sleep(100)
 					return
 				end
@@ -146,7 +154,7 @@ function Tick(tick)
 	    local target = targetFind:GetClosestToMouse(100)
 		if target then
 			local position
-			local distance = GetDistance2D(me,SFrange(target,me)) --(me,SFrange(target,me)) GetDistance2D(me,target)
+			local distance = GetDistance2D(me,SFrange(target,me)) 
 			if distance <= 400 and distance >= 0 then
 				CastAutoRaze(1,target,me)
 			end

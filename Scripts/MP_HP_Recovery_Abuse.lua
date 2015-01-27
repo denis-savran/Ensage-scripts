@@ -1,5 +1,5 @@
 --<<Drop all hp/mp adding items and also use acrane, bottle, etc. Also has keys for dropping tranquil boots and blink.>>
---===By Blaxpirit===--
+--===By Blaxpirit===-
 
 require("libs.Utils")
 require("libs.ScriptConfig")

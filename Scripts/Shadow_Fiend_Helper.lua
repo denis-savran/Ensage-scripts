@@ -1,5 +1,5 @@
 --<<ShadowFiend Combo and Raze helper>>
---===By Blaxpirit and Nova===--
+--===By Blaxpirit===--
 
 require("libs.Utils")
 require("libs.ScriptConfig")
@@ -23,6 +23,7 @@ local play = false
 local active = false
 local Ractive = false
 local unbinded = false
+local disableAutoAttack = false
 
 --Text on your screen
 local x,y = config:GetParameter("TextPositionX"), config:GetParameter("TextPositionY")
@@ -58,10 +59,13 @@ end
 function Tick(tick)
 	if not SleepCheck() then return end
 	
-	if not SleepCheck("auto_attack") then
+	--Auto attack toggle
+	if not SleepCheck("auto_attack") and disableAutoAttack then -- disabling 
 		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 0")
-	else
+		disableAutoAttack = false
+	elseif SleepCheck("auto_attack") and not disableAutoAttack then -- enabling 
 		client:ExecuteCmd("dota_player_units_auto_attack_after_spell 1")
+		disableAutoAttack = true
 	end
 	
 	local me = entityList:GetMyHero()
@@ -110,6 +114,7 @@ function Tick(tick)
 			local eulmodif = target:FindModifier("modifier_eul_cyclone")
 			if eul and eul:CanBeCasted() and not eulmodif then
 				me:CastAbility(eul,target)
+				--disableAutoAttack = true
 				Sleep(2500,"auto_attack")
 				Sleep(100)
 				return

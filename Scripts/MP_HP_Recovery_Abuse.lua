@@ -18,39 +18,45 @@ local reg = false
 local active = false
 local activated = false
 local disableAutoAttack = false
+local treads_laststate
+local treads_changed
 
-local sleepTick = nil
-local sleepTick2 = nil
+local BugedItems = {"item_ancient_janggo","item_veil_of_discord"}
 
 function Key(msg,code)
 	if not PlayingGame() or client.chat then return end
 	
+	local me = entityList:GetMyHero()
+	local mp = entityList:GetMyPlayer()
+	
 	if msg == KEY_DOWN then
 		if active then
 			if code == toggleKey then
-				DropItems()
+				DropItems(me,mp)
 			end
 		end
 		if code == dropblink then
-			DropBlink()
+			DropBlink(me,mp)
 		end
 	end	
 	if msg == KEY_UP then
 		if code == toggleKey then
-			PickUpItems()
+			PickUpItems(me,mp)
 		end
 		if code == dropblink then
-			PickUpItems()
+			PickUpItems(me,mp)
 		end
 		if code == droptranquils then
-			DropTranquils()
-			PickUpTranquils()
+			DropTranquils(me,mp)
+			PickUpTranquils(me,mp)
 		end
 	end
 end
 	
 function Tick( tick )
-	if not PlayingGame() then return end	
+	if not PlayingGame() then return end
+	
+	local me = entityList:GetMyHero()
 	if not me then return end
 	
 	if not SleepCheck() then
@@ -68,7 +74,7 @@ function Tick( tick )
 	end
 end	
 	
-function DropItems()
+function DropItems(me,mp)
 	if me.alive and (me.mana ~= me.maxMana or me.health ~= me.maxHealth) then
 		Sleep(3250,"auto_attack")
 		mp:HoldPosition()
@@ -91,40 +97,37 @@ function DropItems()
 			local treads = me:FindItem("item_power_treads")
 			
 			if not chanel then
-				if v.name  == "item_power_treads" and treads and ((treads.bootsState == 0 and me.health ~= me.maxHealth) or (treads.bootsState == 1 and me.mana ~= me.maxMana)) then
-					mp:DropItem(treads,me.position)
+				if v.name == "item_power_treads" and treads then
+					if treads.bootsState == 0 and me.health ~= me.maxHealth then
+						me:CastAbility(treads)
+						me:CastAbility(treads)
+						treads_laststate = 0
+						treads_changed = true
+					elseif treads.bootsState == 1 and me.mana ~= me.maxMana then
+						me:CastAbility(treads)
+						treads_laststate = 1
+						treads_changed = true
+					elseif treads.bootsState == 2 and not treads_changed then
+						treads_laststate = 2
+					end
 				end
 				if v.name == "item_refresher" and me.mana ~= me.maxMana then
 					mp:DropItem(v,me.position)
 				end
-				if v.name == "item_ancient_janggo" then
-					mp:DropItem(v,me.position)
-				end
-				if v.name == "item_veil_of_discord" then
-					mp:DropItem(v,me.position)
-				end
-				if bonusMana or bonusIntellect or bonusAll and me.mana ~= me.maxMana then
-					if aboots and aboots.cd == 0 then
-						if v.name ~= "item_arcane_boots" then
-							mp:DropItem(v,me.position)
-						end
-					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
-						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
-							mp:DropItem(v,me.position)
-						else 
-							if v.name ~= "item_magic_wand" then
-								mp:DropItem(v,me.position)
-							end
-						end
-					else 
+				for j,k in ipairs(BugedItems) do
+					if v.name == BugedItems[j] then
 						mp:DropItem(v,me.position)
 					end
 				end
-				if bonusStrength or bonusHealth or bonusAll and me.health ~= me.maxHealth then
-					if mek and mek.cd == 0 then
+				if bonusHealth or bonusMana or bonusStrength or bonusIntellect or bonusAll then
+					if aboots and aboots.cd == 0 and me.mana ~= me.maxMana then
+						if v.name ~= "item_arcane_boots" then
+							mp:DropItem(v,me.position)
+						end
+					elseif mek and mek.cd == 0 and me.health ~= me.maxHealth then
 						if v.name ~= "item_mekansm" then
 							mp:DropItem(v,me.position)
-						end 
+						end
 					elseif gradestick and gradestick.charges > 0 and gradestick.cd == 0 then
 						if bottle and bottle.charges > 0 and bottle.cd == 0 then 
 							mp:DropItem(v,me.position)
@@ -164,7 +167,7 @@ function DropItems()
 	end	
 end
 
-function DropBlink()	
+function DropBlink(me,mp)	
 	local blink  = me:FindItem("item_blink")
 	local chanel = me:IsChanneling()
 	if me.alive and not chanel then
@@ -176,7 +179,7 @@ function DropBlink()
 	end
 end
 
-function DropTranquils()	
+function DropTranquils(me,mp)	
 	local tranquilboots = me:FindItem("item_tranquil_boots")
 	local chanel = me:IsChanneling()
 	if me.alive and not chanel then
@@ -187,19 +190,29 @@ function DropTranquils()
 	end
 end
 
-function PickUpItems()
+function PickUpItems(me,mp)
 	local DroppedItems = entityList:FindEntities({type=LuaEntity.TYPE_ITEM_PHYSICAL})
+	local treads = me:FindItem("item_power_treads")
 	for i,v in ipairs(DroppedItems) do
 		local IH = v.itemHolds
 		if IH.owner == me and GetDistance2D(me,v) <= 150 then
 			mp:TakeItem(v)
 		end
 	end
+	if treads and treads.bootsState ~= treads_laststate then
+		if treads_laststate == 0 then
+			me:CastAbility(treads)
+		elseif treads_laststate == 1 then
+			me:CastAbility(treads)
+			me:CastAbility(treads)
+		end
+	end
+	treads_changed = false
 	mp:Move(client.mousePosition)
 	Sleep(500,"auto_attack")
 end
 
-function PickUpTranquils()
+function PickUpTranquils(me,mp)
 	local DroppedItems = entityList:FindEntities({type=LuaEntity.TYPE_ITEM_PHYSICAL})
 	for i,v in ipairs(DroppedItems) do
 		local IH = v.itemHolds
@@ -212,8 +225,7 @@ end
 
 function Load()
 	if PlayingGame() then
-		me = entityList:GetMyHero()
-		mp = entityList:GetMyPlayer()
+		local me = entityList:GetMyHero()
 		if not me then 
 			script:Disable()
 		else

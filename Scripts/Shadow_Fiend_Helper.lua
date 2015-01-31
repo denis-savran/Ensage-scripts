@@ -73,20 +73,6 @@ function Tick(tick)
 	local me = entityList:GetMyHero()
 	local mp = entityList:GetMyPlayer()
 	
-	--Unbind standart key binds
-	local sel = mp.selection[1]
-	if sel and sel.name == "npc_dota_hero_nevermore" and not unbinded then
-		client:ExecuteCmd("unbind q")
-		client:ExecuteCmd("unbind w")
-		client:ExecuteCmd("unbind e")
-		unbinded = true
-	elseif sel and sel.name ~= "npc_dota_hero_nevermore" and unbinded then
-		client:ExecuteCmd("bind q \"dota_ability_quickcast 0\"")
-		client:ExecuteCmd("bind w \"dota_ability_quickcast 1\"")
-		client:ExecuteCmd("bind e \"dota_ability_quickcast 2\"")
-		unbinded = false
-	end
-	
 	--Choosing skillbuild 
 	if skillbuild == 1 then
 		sb = sb1
@@ -139,22 +125,6 @@ function Tick(tick)
 		end
 	end
 	
-	--Smart razes
-	if not client.chat and sel and sel.name == "npc_dota_hero_nevermore" and SleepCheck("razes") then
-		--[[ Q hotkey - Shadowraze(near) ]]
-		if IsKeyDown(81) then
-			CastSmartRaze(1,me,mp)
-		end
-		--[[ W hotkey - Shadowraze(medium) ]]
-		if IsKeyDown(87) then
-			CastSmartRaze(2,me,mp)
-		end
-		--[[ E hotkey - Shadowraze(far) ]]
-		if IsKeyDown(69) then
-			CastSmartRaze(3,me,mp)
-		end
-	end
-	
 	--Auto razes 
 	if Ractive then
 	    local target = targetFind:GetClosestToMouse(100)
@@ -180,20 +150,6 @@ function CastAutoRaze(number,target,me)
 		me:Attack(target)
 		me:CastAbility(raze)
 		Sleep(200)
-	end
-end
-
-function CastSmartRaze(number,me,mp)
-	local raze = me:GetAbility(number)
-	local cursor = client.mousePosition
-	if raze:CanBeCasted() then
-		if me:FindRelativeAngle(cursor) >= 0.1 or me:FindRelativeAngle(cursor) <= -0.1 then
-			mp:Move((cursor - me.position) * 50 / GetDistance2D(cursor,me) + me.position)
-		end
-		if me:FindRelativeAngle(cursor) <= 0.1 and me:FindRelativeAngle(cursor) >= -0.1 then
-			me:CastAbility(raze)
-		end
-		Sleep(250,"razes")
 	end
 end
 

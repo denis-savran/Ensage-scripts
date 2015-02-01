@@ -97,14 +97,13 @@ function DropItems(me,mp)
 			local treads = me:FindItem("item_power_treads")
 			
 			if not chanel then
-				if v.name == "item_power_treads" and treads then
+				if v.name == "item_power_treads" then
 					if treads.bootsState == 0 and me.health ~= me.maxHealth then
-						me:CastAbility(treads)
-						me:CastAbility(treads)
+						me:SetPowerTreadsState(2)
 						treads_laststate = 0
 						treads_changed = true
 					elseif treads.bootsState == 1 and me.mana ~= me.maxMana then
-						me:CastAbility(treads)
+						me:SetPowerTreadsState(2)
 						treads_laststate = 1
 						treads_changed = true
 					elseif treads.bootsState == 2 and not treads_changed then
@@ -201,10 +200,9 @@ function PickUpItems(me,mp)
 	end
 	if treads and treads.bootsState ~= treads_laststate then
 		if treads_laststate == 0 then
-			me:CastAbility(treads)
+			me:SetPowerTreadsState(0)
 		elseif treads_laststate == 1 then
-			me:CastAbility(treads)
-			me:CastAbility(treads)
+			me:SetPowerTreadsState(1)
 		end
 	end
 	treads_changed = false

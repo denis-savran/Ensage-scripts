@@ -25,6 +25,7 @@ local active = false
 local Ractive = false
 local unbinded = false
 local disableAutoAttack = false
+local shothuned = false
 
 --Text on your screen
 local x,y = config:GetParameter("TextPositionX"), config:GetParameter("TextPositionY")
@@ -92,7 +93,7 @@ function Tick(tick)
 	--Stuff we need for combo
 	local eul = me:FindItem("item_cyclone")
 	local blink = me:FindItem("item_blink")
-	local phase = me:FindItem("item_phase_boots")
+	local ethereal = me:FindItem("item_ethereal_blade")
 	local ult = me:GetAbility(6)
 	
 	--Eul combo
@@ -100,14 +101,28 @@ function Tick(tick)
         local target = targetFind:GetClosestToMouse(100)
 		if target then
 			local eulmodif = target:FindModifier("modifier_eul_cyclone")
+			local etherealmodif = target:FindModifier("modifier_item_ethereal_blade_slow")
 			if eul and eul:CanBeCasted() and not eulmodif then
-				me:CastAbility(eul,target)
+				if ethereal and ethereal:CanBeCasted() then
+					me:CastAbility(ethereal,target)
+					shothuned = true
+					Sleep(10,"ethereal")
+				end
+				if SleepCheck("ethereal") then
+					if etherealmodif and shothuned then
+						me:CastAbility(eul,target)
+						shothuned = false
+					elseif not shothuned then
+						me:CastAbility(eul,target)
+					end
+				end
 				Sleep(2500,"auto_attack")
 				Sleep(100)
 				return
 			end
 			if eulmodif then
 				if GetDistance2D(me,target)/me.movespeed < 0.8 and SleepCheck("move") and SleepCheck("blink") then
+					me:SafeCastItem("item_phase_boots")
 					mp:Move(target.position)
 					Sleep(2000,"move")
 				elseif blink and blink:CanBeCasted() and (eulmodif.remainingTime < 1.80) and SleepCheck("move") then

@@ -33,8 +33,6 @@ local statusText2 = drawMgr:CreateText((x)*monitor,(y+17)*monitor,0xF5AE33FF,"HO
 local statusText3 = drawMgr:CreateText((x)*monitor,(y+32)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(RazeKey).."'' for Auto Raze",F15) statusText3.visible = false
 local etherealText = drawMgr:CreateText((x)*monitor,(y+70)*monitor,0xFFFFFFFFF,"Ethereal: On",F15) etherealText.visible = false
 
---local statusText4 = drawMgr:CreateText((x)*monitor,(y+32)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(RazeKey).."'' for Auto Raze",F15) statusText4.visible = true
-
 local play = false
 local active = false
 local Ractive = false
@@ -176,37 +174,42 @@ function Tick(tick)
     end
 	
 	--Damage calculator
-	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam(),GetDistance2D(me)<900})
-	local numberofstacks = me:FindModifier("modifier_nevermore_necromastery").stacks
-	for i,v in ipairs(enemies) do
-		local OnScreen = client:ScreenPosition(v.position)
-		if OnScreen then
-			if v.healthbarOffset ~= -1 then
-				local hand = v.handle
-				if hand ~= me.handle then
-					if not hero[hand] then
-						hero[hand] = drawMgr:CreateText(25,-55, 0x00FFFFAA, "",F14) 
-						hero[hand].visible = false 
-						hero[hand].entity = v 
-						hero[hand].entityPosition = Vector(0,0,v.healthbarOffset)
-					end
-					if v.alive and v.visible then
-						local totaldamage = wavedamage[ult.level]*numberofstacks/2 + 50
-						local magicdmgreduction = (1 - v.magicDmgResist)
-						if ethereal and not v:DoesHaveModifier("modifier_item_ethereal_blade_slow") then
-							totaldamage = totaldamage + 2*me.agilityTotal + 75
-							magicdmgreduction = (1 + 0.4)*magicdmgreduction
-							--statusText4.text = ""..magicdmgreduction
+	if eul or blink then
+		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam(),GetDistance2D(me)<900})
+		local stacks = me:FindModifier("modifier_nevermore_necromastery")
+		local numberofstacks = 0
+		if stacks then
+			numberofstacks = me:FindModifier("modifier_nevermore_necromastery").stacks
+		end
+		for i,v in ipairs(enemies) do
+			local OnScreen = client:ScreenPosition(v.position)
+			if OnScreen then
+				if v.healthbarOffset ~= -1 then
+					local hand = v.handle
+					if hand ~= me.handle then
+						if not hero[hand] then
+							hero[hand] = drawMgr:CreateText(25,-55, 0x00FFFFAA, "",F14) 
+							hero[hand].visible = false 
+							hero[hand].entity = v 
+							hero[hand].entityPosition = Vector(0,0,v.healthbarOffset)
 						end
-						local damage = totaldamage*magicdmgreduction
-						hero[hand].visible = true
-						if v.health - damage < 0 then
-							hero[hand].text = "Killable"
-						else
-							hero[hand].text = "HP left:"..v.health - damage
+						if v.alive and v.visible and ult.level > 0 then
+							local totaldamage = wavedamage[ult.level]*numberofstacks/2 + 50
+							local magicdmgreduction = (1 - v.magicDmgResist)
+							if ethereal and not v:DoesHaveModifier("modifier_item_ethereal_blade_slow") then
+								totaldamage = totaldamage + 2*me.agilityTotal + 75
+								magicdmgreduction = (1 + 0.4)*magicdmgreduction
+							end
+							local damage = totaldamage*magicdmgreduction
+							hero[hand].visible = true
+							if v.health - damage < 0 then
+								hero[hand].text = "Killable"
+							else
+								hero[hand].text = "HP left:"..v.health - damage
+							end
+						elseif hero[hand].visible then
+							hero[hand].visible = false
 						end
-					elseif hero[hand].visible then
-						hero[hand].visible = false
 					end
 				end
 			end

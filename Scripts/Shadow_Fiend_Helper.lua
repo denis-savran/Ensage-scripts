@@ -10,22 +10,18 @@ require("libs.TargetFind")
 config = ScriptConfig.new()
 config:SetParameter("Hotkey", "F", config.TYPE_HOTKEY)
 config:SetParameter("RazeKey", "D", config.TYPE_HOTKEY)
-config:SetParameter("HideKey", "G", config.TYPE_HOTKEY)
+config:SetParameter("UseEthereal", "G", config.TYPE_HOTKEY)
+config:SetParameter("ShowText", true)
 config:SetParameter("SkillBuild", 1)
 config:SetParameter("TextPositionX", 5)
 config:SetParameter("TextPositionY", 40)
 config:Load()
 
 local Hotkey = config.Hotkey
-local RazeKey  = config.RazeKey
-local HideKey = config.HideKey
+local RazeKey = config.RazeKey
+local UseEthereal = config.UseEthereal
+local ShowText = config.ShowText
 local skillbuild = config.SkillBuild
-local play = false
-local active = false
-local Ractive = false
-local unbinded = false
-local disableAutoAttack = false
-local shotgunned = false
 
 --Text on your screen
 local x,y = config:GetParameter("TextPositionX"), config:GetParameter("TextPositionY")
@@ -35,7 +31,20 @@ local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
 local statusText = drawMgr:CreateText(x*monitor,y*monitor,0xC92828FF,"ShadowFiend Script",F14) statusText.visible = false
 local statusText2 = drawMgr:CreateText((x)*monitor,(y+17)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(Hotkey).."'' for Ult Combo",F15) statusText2.visible = false
 local statusText3 = drawMgr:CreateText((x)*monitor,(y+32)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(RazeKey).."'' for Auto Raze",F15) statusText3.visible = false
-local statusText4 = drawMgr:CreateText((x)*monitor,(y+47)*monitor,0xFFFFFFFFF,"Press:  ''"..string.char(HideKey).."'' to hide this message for the rest of the game.",F15) statusText4.visible = false
+local etherealText = drawMgr:CreateText((x)*monitor,(y+70)*monitor,0xFFFFFFFFF,"Ethereal: On",F15) etherealText.visible = false
+
+--local statusText4 = drawMgr:CreateText((x)*monitor,(y+32)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(RazeKey).."'' for Auto Raze",F15) statusText4.visible = true
+
+local play = false
+local active = false
+local Ractive = false
+local unbinded = false
+local disableAutoAttack = false
+local shotgunned = false
+local etherealactive = true
+
+local hero = {}
+local wavedamage = {80,120,160}
 
 --=====================<< SkillBuilds >>=======================
 --1 - raze, 4 - necromastery, 5 - presence of a dark lord, 6 - ult, 7 - attribute bonus
@@ -51,11 +60,13 @@ function Key(msg,code)
 	if code == RazeKey then
 		Ractive = (msg == KEY_DOWN)
 	end
-	if code == HideKey and statusText.visible == true then
-	    statusText.visible = false
-	    statusText2.visible = false
-	    statusText3.visible = false
-	    statusText4.visible = false
+	if code == UseEthereal and msg == KEY_UP then
+	    etherealactive = not etherealactive
+		if etherealactive then
+			etherealText.text = "Ethereal: On"
+		else
+			etherealText.text = "Ethereal: Off"
+		end
 	end
 end
 
@@ -96,6 +107,12 @@ function Tick(tick)
 	local ethereal = me:FindItem("item_ethereal_blade")
 	local ult = me:GetAbility(6)
 	
+	if ethereal then
+		etherealText.visible = true
+	else
+		etherealText.visible = false
+	end
+	
 	--Eul combo
 	if active then
         local target = targetFind:GetClosestToMouse(100)
@@ -103,7 +120,7 @@ function Tick(tick)
 			local eulmodif = target:FindModifier("modifier_eul_cyclone")
 			local etherealmodif = target:FindModifier("modifier_item_ethereal_blade_slow")
 			if eul and eul:CanBeCasted() and not eulmodif then
-				if ethereal and ethereal:CanBeCasted() then
+				if etherealactive and ethereal and ethereal:CanBeCasted() then
 					me:CastAbility(ethereal,target)
 					shotgunned = true
 					Sleep(10,"ethereal")
@@ -125,7 +142,7 @@ function Tick(tick)
 					me:SafeCastItem("item_phase_boots")
 					mp:Move(target.position)
 					Sleep(2000,"move")
-				elseif blink and blink:CanBeCasted() and (eulmodif.remainingTime < 1.80) and SleepCheck("move") then
+				elseif blink and blink:CanBeCasted() and (eulmodif.remainingTime < 1.85) and SleepCheck("move") then
 					me:CastAbility(blink,target.position)
 					Sleep(2000,"blink")
 					Sleep(100)
@@ -157,6 +174,44 @@ function Tick(tick)
 			end
 		end
     end
+	
+	--Damage calculator
+	local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam(),GetDistance2D(me)<900})
+	local numberofstacks = me:FindModifier("modifier_nevermore_necromastery").stacks
+	for i,v in ipairs(enemies) do
+		local OnScreen = client:ScreenPosition(v.position)
+		if OnScreen then
+			if v.healthbarOffset ~= -1 then
+				local hand = v.handle
+				if hand ~= me.handle then
+					if not hero[hand] then
+						hero[hand] = drawMgr:CreateText(25,-55, 0x00FFFFAA, "",F14) 
+						hero[hand].visible = false 
+						hero[hand].entity = v 
+						hero[hand].entityPosition = Vector(0,0,v.healthbarOffset)
+					end
+					if v.alive and v.visible then
+						local totaldamage = wavedamage[ult.level]*numberofstacks/2 + 50
+						local magicdmgreduction = (1 - v.magicDmgResist)
+						if ethereal and not v:DoesHaveModifier("modifier_item_ethereal_blade_slow") then
+							totaldamage = totaldamage + 2*me.agilityTotal + 75
+							magicdmgreduction = (1 + 0.4)*magicdmgreduction
+							--statusText4.text = ""..magicdmgreduction
+						end
+						local damage = totaldamage*magicdmgreduction
+						hero[hand].visible = true
+						if v.health - damage < 0 then
+							hero[hand].text = "Killable"
+						else
+							hero[hand].text = "HP left:"..v.health - damage
+						end
+					elseif hero[hand].visible then
+						hero[hand].visible = false
+					end
+				end
+			end
+		end
+	end
 end
 
 function CastAutoRaze(number,target,me)
@@ -193,10 +248,12 @@ function Load()
 			script:Disable()
 		else
 			play = true
-			statusText.visible = true
-			statusText2.visible = true
-			statusText3.visible = true
-			statusText4.visible = true
+			if ShowText then
+				statusText.visible = true
+				statusText2.visible = true
+				statusText3.visible = true
+			end
+			etherealText.visible = false
 			script:RegisterEvent(EVENT_TICK,Tick)
 			script:RegisterEvent(EVENT_KEY,Key)
 			script:UnregisterEvent(Load)
@@ -210,7 +267,7 @@ function GameClose()
 	    statusText.visible = false
 		statusText2.visible = false
 		statusText3.visible = false
-		statusText4.visible = false
+		etherealText.visible = false
 		script:UnregisterEvent(Tick)
 		script:UnregisterEvent(Key)
 		play = false

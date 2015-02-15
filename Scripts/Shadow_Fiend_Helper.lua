@@ -29,8 +29,8 @@ local disableAutoAttack = false
 --Text on your screen
 local x,y = config:GetParameter("TextPositionX"), config:GetParameter("TextPositionY")
 local monitor = client.screenSize.x/1600
-local F14 = drawMgr:CreateFont("F14","Tahoma",16*monitor,750*monitor) 
-local F15 = drawMgr:CreateFont("F14","Tahoma",15*monitor,550*monitor) 
+local F14 = drawMgr:CreateFont("F14","Tahoma",14*monitor,550*monitor)
+local F15 = drawMgr:CreateFont("F15","Tahoma",15*monitor,550*monitor)
 local statusText = drawMgr:CreateText(x*monitor,y*monitor,0xC92828FF,"ShadowFiend Script",F14) statusText.visible = false
 local statusText2 = drawMgr:CreateText((x)*monitor,(y+17)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(Hotkey).."'' for Ult Combo",F15) statusText2.visible = false
 local statusText3 = drawMgr:CreateText((x)*monitor,(y+32)*monitor,0xF5AE33FF,"HOLD: ''"..string.char(RazeKey).."'' for Auto Raze",F15) statusText3.visible = false

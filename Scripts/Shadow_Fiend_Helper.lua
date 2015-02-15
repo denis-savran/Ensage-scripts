@@ -174,7 +174,7 @@ function Tick(tick)
     end
 	
 	--Damage calculator
-	if eul or blink then
+	if ult.level > 0 then
 		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam(),GetDistance2D(me)<900})
 		local stacks = me:FindModifier("modifier_nevermore_necromastery")
 		local numberofstacks = 0
@@ -193,7 +193,7 @@ function Tick(tick)
 							hero[hand].entity = v 
 							hero[hand].entityPosition = Vector(0,0,v.healthbarOffset)
 						end
-						if v.alive and v.visible and ult.level > 0 then
+						if v.alive and v.visible  then
 							local totaldamage = wavedamage[ult.level]*numberofstacks/2 + 50
 							local magicdmgreduction = (1 - v.magicDmgResist)
 							if ethereal and not v:DoesHaveModifier("modifier_item_ethereal_blade_slow") then

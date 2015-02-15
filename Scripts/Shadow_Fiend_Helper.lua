@@ -196,7 +196,7 @@ function GameClose()
 		statusText2.visible = false
 		statusText3.visible = false
 		statusText4.visible = false
-		script:UnregisterEvent(Main)
+		script:UnregisterEvent(Tick)
 		script:UnregisterEvent(Key)
 		play = false
 	end

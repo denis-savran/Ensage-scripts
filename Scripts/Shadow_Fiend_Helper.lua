@@ -25,7 +25,7 @@ local active = false
 local Ractive = false
 local unbinded = false
 local disableAutoAttack = false
-local shothuned = false
+local shotgunned = false
 
 --Text on your screen
 local x,y = config:GetParameter("TextPositionX"), config:GetParameter("TextPositionY")
@@ -105,14 +105,14 @@ function Tick(tick)
 			if eul and eul:CanBeCasted() and not eulmodif then
 				if ethereal and ethereal:CanBeCasted() then
 					me:CastAbility(ethereal,target)
-					shothuned = true
+					shotgunned = true
 					Sleep(10,"ethereal")
 				end
 				if SleepCheck("ethereal") then
-					if etherealmodif and shothuned then
+					if etherealmodif and shotgunned then
 						me:CastAbility(eul,target)
-						shothuned = false
-					elseif not shothuned then
+						shotgunned = false
+					elseif not shotgunned then
 						me:CastAbility(eul,target)
 					end
 				end

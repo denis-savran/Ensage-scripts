@@ -36,7 +36,6 @@ local etherealText = drawMgr:CreateText((x)*monitor,(y+70)*monitor,0xFFFFFFFFF,"
 local play = false
 local active = false
 local Ractive = false
-local unbinded = false
 local disableAutoAttack = false
 local shotgunned = false
 local etherealactive = true
@@ -251,6 +250,11 @@ function Load()
 			script:Disable()
 		else
 			play = true
+			active = false
+			Ractive = false
+			disableAutoAttack = false
+			shotgunned = false
+			etherealactive = true
 			if ShowText then
 				statusText.visible = true
 				statusText2.visible = true
@@ -267,7 +271,12 @@ end
 function GameClose()
 	collectgarbage("collect")
 	if play then
-	    statusText.visible = false
+		active = false
+		Ractive = false
+		disableAutoAttack = false
+		shotgunned = false
+		etherealactive = true
+		statusText.visible = false
 		statusText2.visible = false
 		statusText3.visible = false
 		etherealText.visible = false

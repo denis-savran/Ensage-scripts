@@ -39,8 +39,8 @@ local Ractive = false
 local disableAutoAttack = false
 local shotgunned = false
 local etherealactive = true
-
 local hero = {}
+
 local wavedamage = {80,120,160}
 
 --=====================<< SkillBuilds >>=======================
@@ -255,6 +255,7 @@ function Load()
 			disableAutoAttack = false
 			shotgunned = false
 			etherealactive = true
+			hero = {}
 			if ShowText then
 				statusText.visible = true
 				statusText2.visible = true
@@ -276,7 +277,8 @@ function GameClose()
 		disableAutoAttack = false
 		shotgunned = false
 		etherealactive = true
-		statusText.visible = false
+		hero = {}
+	    statusText.visible = false
 		statusText2.visible = false
 		statusText3.visible = false
 		etherealText.visible = false

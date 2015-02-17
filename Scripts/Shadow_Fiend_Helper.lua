@@ -174,7 +174,7 @@ function Tick(tick)
 	
 	--Damage calculator
 	if ult.level > 0 then
-		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam(),GetDistance2D(me)<900})
+		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam())
 		local stacks = me:FindModifier("modifier_nevermore_necromastery")
 		local numberofstacks = 0
 		if stacks then
@@ -187,7 +187,7 @@ function Tick(tick)
 					local hand = v.handle
 					if hand ~= me.handle then
 						if not hero[hand] then
-							hero[hand] = drawMgr:CreateText(25,-55, 0x00FFFFAA, "",F14) 
+							hero[hand] = drawMgr:CreateText(25*monitor,-55*monitor, 0x00FFFFAA, "",F14) 
 							hero[hand].visible = false 
 							hero[hand].entity = v 
 							hero[hand].entityPosition = Vector(0,0,v.healthbarOffset)

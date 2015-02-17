@@ -174,7 +174,7 @@ function Tick(tick)
 	
 	--Damage calculator
 	if ult.level > 0 then
-		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam())
+		local enemies = entityList:GetEntities({type=LuaEntity.TYPE_HERO,illusion=false,team=me:GetEnemyTeam()})
 		local stacks = me:FindModifier("modifier_nevermore_necromastery")
 		local numberofstacks = 0
 		if stacks then

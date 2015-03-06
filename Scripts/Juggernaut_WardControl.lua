@@ -19,10 +19,12 @@ local effect = nil
 
 function Key(msg,code)
 
-	if client.chat or msg ~= KEY_UP then return end	
+	if client.chat or msg ~= KEY_UP then return end
+
+        local me = entityList:GetMyHero()
 
 	if code == ward_move then
-		local me = entityList:GetMyHero()	
+			
 		local ward = entityList:GetEntities({classId=297,alive = true,team=me.team})[1]
 		if ward then		
 			local cursor = client.mousePosition

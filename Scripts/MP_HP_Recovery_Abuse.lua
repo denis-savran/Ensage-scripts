@@ -194,7 +194,7 @@ function PickUpItems(me,mp)
 	local treads = me:FindItem("item_power_treads")
 	for i,v in ipairs(DroppedItems) do
 		local IH = v.itemHolds
-		if IH.owner == me and GetDistance2D(me,v) <= 150 then
+		if IH.owner == me and GetDistance2D(me,v) <= 250 then
 			mp:TakeItem(v)
 		end
 	end

@@ -21,10 +21,7 @@ function Key(msg,code)
 
 	if client.chat or msg ~= KEY_UP then return end
 
-        local me = entityList:GetMyHero()
-
 	if code == ward_move then
-			
 		local ward = entityList:GetEntities({classId=297,alive = true,team=me.team})[1]
 		if ward then		
 			local cursor = client.mousePosition
@@ -45,8 +42,6 @@ end
 function Tick(tick)
 
 	if not (client.console or SleepCheck()) then return end
-
-	local me = entityList:GetMyHero()
 
 	local ward = entityList:GetEntities({classId=297,alive = true,team=me.team})[1]
 	
@@ -69,7 +64,7 @@ end
 
 function Load()
 	if PlayingGame() then
-		local me = entityList:GetMyHero()
+		me = entityList:GetMyHero()
 		if me.classId == CDOTA_Unit_Hero_Juggernaut then		
 			play = true
 			script:RegisterEvent(EVENT_KEY,Key)

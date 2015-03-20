@@ -21,12 +21,14 @@ function Key(msg,code)
 
 	if client.chat or msg ~= KEY_UP then return end
 
+	local me = entityList:GetMyHero()
+	local ward = entityList:GetEntities({classId = CDOTA_BaseNPC_Additive, controllable = true, alive = true, team = me.team})[1]
+	
 	if code == ward_move then
-		local ward = entityList:GetEntities({classId=297,alive = true,team=me.team})[1]
 		if ward then		
 			local cursor = client.mousePosition
 			local allied_hero = entityList:GetEntities(function (v) return v.hero and v.alive and v.visible and v.team == me.team and not v:IsIllusion() and GetDistance2D(v,cursor) <= 100 end)[1]
-			if allied_hero then 
+			if allied_hero then
 				ward:Follow(allied_hero)
 			else
 				ward:Move(cursor)
@@ -43,7 +45,8 @@ function Tick(tick)
 
 	if not (client.console or SleepCheck()) then return end
 
-	local ward = entityList:GetEntities({classId=297,alive = true,team=me.team})[1]
+	local me = entityList:GetMyHero()
+	local ward = entityList:GetEntities({classId = CDOTA_BaseNPC_Additive, controllable = true, alive = true, team = me.team})[1]
 	
 	if ward then
 		if not effect then
@@ -51,7 +54,7 @@ function Tick(tick)
 			effect:SetVector(1,Vector(500,0,0))
 		end
 		if active and GetDistance2D(me,ward) > 5 then
-			ward:Move(me.position)			
+			ward:Move(me.position)
 		end
 	elseif effect then
 		effect = nil
@@ -64,7 +67,7 @@ end
 
 function Load()
 	if PlayingGame() then
-		me = entityList:GetMyHero()
+		local me = entityList:GetMyHero()
 		if me.classId == CDOTA_Unit_Hero_Juggernaut then		
 			play = true
 			script:RegisterEvent(EVENT_KEY,Key)
